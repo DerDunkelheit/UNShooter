@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "TPPShooter/Components/AmmoComponent.h"
+
 #include "Weapon.generated.h"
 
 UCLASS()
@@ -22,6 +24,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USkeletalMeshComponent* MeshComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
+	UAmmoComponent* AmmoComponent;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	float Damage;
 
@@ -39,7 +44,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	UParticleSystem* ImpactEffect;
 
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintImplementableEvent)
 	void OnPlayerDied();
 
 	UFUNCTION(BlueprintImplementableEvent)
@@ -51,6 +56,7 @@ public:
 
 	void StartFire();
 	void EndFire();
+	bool TryReload() const { return AmmoComponent->TryReload(); }
 
 private:
 	void Subscribe();

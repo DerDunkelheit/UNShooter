@@ -115,4 +115,5 @@ public:
 private:
 	void StartFire();
 	void EndFire();
+	void ReloadWeapon();
 };

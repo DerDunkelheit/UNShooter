@@ -84,6 +84,7 @@ void ATPPShooterCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	PlayerInputComponent->BindAction("Zoom", IE_Released, ZoomComponent, &UZoomComponent::EndZoom);
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ATPPShooterCharacter::StartFire);
 	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ATPPShooterCharacter::EndFire);
+	PlayerInputComponent->BindAction("Reload",IE_Pressed, this, &ATPPShooterCharacter::ReloadWeapon);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ATPPShooterCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ATPPShooterCharacter::MoveRight);
@@ -202,5 +203,16 @@ void ATPPShooterCharacter::EndFire()
 	{
 		CurrentWeapon->EndFire();
 		bUseControllerRotationYaw = false;
+	}
+}
+
+void ATPPShooterCharacter::ReloadWeapon()
+{
+	if(CurrentWeapon)
+	{
+		if(CurrentWeapon->TryReload())
+		{
+			//TODO: start reload animation.
+		}
 	}
 }

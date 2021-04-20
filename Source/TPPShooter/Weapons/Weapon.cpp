@@ -22,6 +22,7 @@ AWeapon::AWeapon()
 
 	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>("MeshComponent");
 	RootComponent = MeshComponent;
+	AmmoComponent = CreateDefaultSubobject<UAmmoComponent>(TEXT("AmmoComponent"));
 
 	MuzzleSocketName = "MuzzleSocket";
 
@@ -32,10 +33,10 @@ AWeapon::AWeapon()
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	Subscribe();
 
-	TimerBetweenShot = 60/ RateOfFire;
+	TimerBetweenShot = 60 / RateOfFire;
 	LastFireTime = -1;
 }
 
@@ -48,9 +49,9 @@ void AWeapon::Tick(float DeltaTime)
 void AWeapon::StartFire()
 {
 	//TODO: create fire modes, for that we can use common interface in which we'll write shooting logic
-	float FirstDelay = FMath::Max( LastFireTime + TimerBetweenShot - GetWorld()->TimeSeconds, 0.0f);
-	
-    GetWorldTimerManager().SetTimer(TimerHandle_TimeBetweenShots,this,&AWeapon::Fire,TimerBetweenShot,true,FirstDelay);
+	float FirstDelay = FMath::Max(LastFireTime + TimerBetweenShot - GetWorld()->TimeSeconds, 0.0f);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_TimeBetweenShots, this, &AWeapon::Fire, TimerBetweenShot, true, FirstDelay);
 }
 
 void AWeapon::EndFire()
@@ -60,6 +61,14 @@ void AWeapon::EndFire()
 
 void AWeapon::Fire()
 {
+    if(!AmmoComponent->HasAmmo())
+    {
+    	//TODO: add empty mag sound.
+
+    	GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Red,"No ammo");
+    	return;
+    }
+	 
 	AActor* MyOwner = GetOwner();
 	if (MyOwner)
 	{
@@ -90,6 +99,7 @@ void AWeapon::Fire()
 		}
 
 		OnFire();
+		AmmoComponent->ConsumeAmmo();
 
 		if (DebugWeaponDrawing > 0)
 		{
@@ -98,10 +108,6 @@ void AWeapon::Fire()
 
 		LastFireTime = GetWorld()->TimeSeconds;
 	}
-}
-
-void AWeapon::OnPlayerDied_Implementation()
-{
 }
 
 void AWeapon::Subscribe()
