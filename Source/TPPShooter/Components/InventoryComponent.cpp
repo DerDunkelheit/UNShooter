@@ -4,6 +4,7 @@
 #include "InventoryComponent.h"
 
 #include "TPPShooter/Actors/PickupActor.h"
+#include "TPPShooter/Items/AmmoItem.h"
 #include "TPPShooter/Items/Item.h"
 
 // Sets default values for this component's properties
@@ -112,4 +113,45 @@ void UInventoryComponent::DropItem(UItem* Item)
 	                                                       Player->GetItemDropTransform().Rotator());
 	
 	PickUpItem->SetItem(Item);
+}
+
+UItem* UInventoryComponent::TryGetAmmoItem(AmmoTypeEnum AmmoType)
+{
+	//TODO: it's not very optimal.
+	
+	for(auto Item : Items)
+	{
+		UAmmoItem* AmmoItem = Cast<UAmmoItem>(Item);
+		if(AmmoItem)
+		{
+			if(AmmoItem->AmmoType == AmmoType)
+			{
+				return AmmoItem;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+int UInventoryComponent::GetAvailableAmmoQuantity(UAmmoItem* AmmoItem, int RequestedQuantity)
+{
+	if(Items.Contains(AmmoItem))
+	{
+		if(AmmoItem->Quantity > RequestedQuantity)
+		{
+			AmmoItem->Quantity -= RequestedQuantity;
+			return RequestedQuantity;
+		}
+		
+		//TODO: replace to function.
+		auto returnValue =  AmmoItem->Quantity;
+		AmmoItem->Quantity = 0;
+		RemoveItem(AmmoItem);
+		
+		return returnValue;
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1,2,FColor::Red, "ERROR! AmmoItem wasn't found in Inventory!");
+	return 0;
 }

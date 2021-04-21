@@ -4,8 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "AmmoComponent.generated.h"
+#include "TPPShooter/Enums/AmmoTypeEnum.h"
 
+#include "AmmoComponent.generated.h"
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TPPSHOOTER_API UAmmoComponent : public UActorComponent
@@ -33,6 +34,9 @@ private:
 
     UPROPERTY(EditAnywhere, Category = "Settings")
 	bool bUseAmmo;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Settings")
+	AmmoTypeEnum AmmoType;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Settings")
     int InitialAmmo;
@@ -40,5 +44,6 @@ private:
 	UPROPERTY(EditAnywhere,Category = "Settings")
 	int MaxAmmo;
 
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float CurrentAmmo;
 };

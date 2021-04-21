@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "TPPShooter/Actors/PickupActor.h"
+#include "TPPShooter/Enums/AmmoTypeEnum.h"
+
 
 #include "InventoryComponent.generated.h"
 
@@ -44,4 +46,7 @@ public:
 	void AddItem(class UItem* Item);
 	void RemoveItem(class UItem* Item);
 	void DropItem(class UItem* Item);
+	UItem* TryGetAmmoItem(AmmoTypeEnum AmmoType);
+	//TODO: rename
+	int GetAvailableAmmoQuantity(class UAmmoItem* AmmoItem,int RequestedQuantity);
 };

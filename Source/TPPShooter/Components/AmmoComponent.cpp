@@ -3,6 +3,10 @@
 
 #include "AmmoComponent.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "TPPShooter/TPPShooterCharacter.h"
+#include "TPPShooter/Items/AmmoItem.h"
+
 // Sets default values for this component's properties
 UAmmoComponent::UAmmoComponent()
 {
@@ -46,10 +50,19 @@ void UAmmoComponent::ConsumeAmmo(int Amount)
 
 bool UAmmoComponent::TryReload()
 {
-	//TODO: check ammo in player inventory.
-
-	CurrentAmmo += 30;
-	if(CurrentAmmo > MaxAmmo) CurrentAmmo = MaxAmmo;
-	return true;
+	auto Player = Cast<ATPPShooterCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	if(Player)
+	{
+		UItem* AmmoItem = Player->GetInventoryComponent()->TryGetAmmoItem(AmmoType);
+		if(AmmoItem)
+		{
+			int AmountToRequest = MaxAmmo - CurrentAmmo;
+			CurrentAmmo += Player->GetInventoryComponent()->GetAvailableAmmoQuantity(Cast<UAmmoItem>(AmmoItem), AmountToRequest);
+			return true;
+		}
+	}
+	
+	GEngine->AddOnScreenDebugMessage(-1,2,FColor::Cyan,"Player doesn't have appropriate ammo in inventory");
+	return false;
 }
 

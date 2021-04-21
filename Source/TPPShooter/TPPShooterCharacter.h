@@ -112,6 +112,9 @@ public:
 
 	FTransform GetItemDropTransform() { return ItemDropPosition->GetComponentTransform(); }
 
+	//TODO: came up with better solution.
+	UInventoryComponent* GetInventoryComponent() const {return Inventory;}
+
 private:
 	void StartFire();
 	void EndFire();
