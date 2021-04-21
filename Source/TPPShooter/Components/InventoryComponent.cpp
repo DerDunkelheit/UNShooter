@@ -111,20 +111,20 @@ void UInventoryComponent::DropItem(UItem* Item)
 	auto Player = Cast<ATPPShooterCharacter>(GetOwner());
 	auto PickUpItem = GetWorld()->SpawnActor<APickupActor>(DropItemPrefab, Player->GetItemDropTransform().GetLocation(),
 	                                                       Player->GetItemDropTransform().Rotator());
-	
+
 	PickUpItem->SetItem(Item);
 }
 
 UItem* UInventoryComponent::TryGetAmmoItem(AmmoTypeEnum AmmoType)
 {
 	//TODO: it's not very optimal.
-	
-	for(auto Item : Items)
+
+	for (auto Item : Items)
 	{
 		UAmmoItem* AmmoItem = Cast<UAmmoItem>(Item);
-		if(AmmoItem)
+		if (AmmoItem)
 		{
-			if(AmmoItem->AmmoType == AmmoType)
+			if (AmmoItem->AmmoType == AmmoType)
 			{
 				return AmmoItem;
 			}
@@ -134,24 +134,27 @@ UItem* UInventoryComponent::TryGetAmmoItem(AmmoTypeEnum AmmoType)
 	return nullptr;
 }
 
-int UInventoryComponent::GetAvailableAmmoQuantity(UAmmoItem* AmmoItem, int RequestedQuantity)
+int UInventoryComponent::RequestAmmoFromInventory(UAmmoItem* AmmoItem, int RequestedQuantity)
 {
-	if(Items.Contains(AmmoItem))
+	if (Items.Contains(AmmoItem))
 	{
-		if(AmmoItem->Quantity > RequestedQuantity)
-		{
-			AmmoItem->Quantity -= RequestedQuantity;
-			return RequestedQuantity;
-		}
-		
-		//TODO: replace to function.
-		auto returnValue =  AmmoItem->Quantity;
-		AmmoItem->Quantity = 0;
-		RemoveItem(AmmoItem);
-		
-		return returnValue;
+		return CalculateRequestedAmmo(AmmoItem, RequestedQuantity);
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1,2,FColor::Red, "ERROR! AmmoItem wasn't found in Inventory!");
+	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "ERROR! AmmoItem wasn't found in Inventory!");
 	return 0;
+}
+
+int UInventoryComponent::CalculateRequestedAmmo(UAmmoItem* AmmoItem, int RequestedQuantity)
+{
+	if (AmmoItem->Quantity > RequestedQuantity)
+	{
+		AmmoItem->Quantity -= RequestedQuantity;
+		return RequestedQuantity;
+	}
+
+	const auto ReturnValue = AmmoItem->Quantity;
+	RemoveItem(AmmoItem);
+
+	return ReturnValue;
 }

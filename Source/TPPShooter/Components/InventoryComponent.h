@@ -13,7 +13,7 @@
 //Blueprints will bind to this to update the UI.
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryUpdated);
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class TPPSHOOTER_API UInventoryComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -27,15 +27,15 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Items")
 	TArray<class UItem*> Items;
-	
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Inventory")
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Inventory")
 	int Capacity;
 
 	UPROPERTY(BlueprintAssignable, Category = "Inventory")
 	FOnInventoryUpdated OnInventoryUpdated;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Items")
-    TSubclassOf<class APickupActor> DropItemPrefab;
+	TSubclassOf<class APickupActor> DropItemPrefab;
 
 protected:
 	// Called when the game starts
@@ -47,6 +47,8 @@ public:
 	void RemoveItem(class UItem* Item);
 	void DropItem(class UItem* Item);
 	UItem* TryGetAmmoItem(AmmoTypeEnum AmmoType);
-	//TODO: rename
-	int GetAvailableAmmoQuantity(class UAmmoItem* AmmoItem,int RequestedQuantity);
+	int RequestAmmoFromInventory(class UAmmoItem* AmmoItem, int RequestedQuantity);
+
+private:
+	int CalculateRequestedAmmo(class UAmmoItem* AmmoItem, int RequestedQuantity);
 };
