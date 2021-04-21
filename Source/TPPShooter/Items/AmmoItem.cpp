@@ -5,5 +5,6 @@
 
 UAmmoItem::UAmmoItem()
 {
-	bStackable = true; 
+	bStackable = true;
+	bCanBeUsed = false;
 }

@@ -9,6 +9,9 @@
 #include "TPPShooter/Components/InventoryComponent.h"
 #include "Item.generated.h"
 
+//TODO: create max item stacks
+//TODO: create items division into parts
+
 UCLASS(Abstract, BlueprintType, Blueprintable, EditInlineNew , DefaultToInstanced)
 class TPPSHOOTER_API UItem : public UObject
 {
@@ -21,7 +24,10 @@ public:
 	UPROPERTY(Transient)
 	class UWorld* World;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item")
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item")
+	bool bCanBeUsed;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item", meta = (EditCondition = "bCanBeUsed"))
 	FText UseActionText;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item")
