@@ -154,6 +154,7 @@ int UInventoryComponent::CalculateRequestedAmmo(UAmmoItem* AmmoItem, int Request
 	}
 
 	const auto ReturnValue = AmmoItem->Quantity;
+	AmmoItem->Quantity = 1;
 	RemoveItem(AmmoItem);
 
 	return ReturnValue;
