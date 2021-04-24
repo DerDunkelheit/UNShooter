@@ -1,4 +1,4 @@
-﻿#include "GameDebugger.h"
+﻿#include "GameDebuggerNew.h"
 
 static int32 DebugWeaponDrawing = 0;
 FAutoConsoleVariableRef CVARDebugWeaponDrawing(
@@ -14,12 +14,12 @@ FAutoConsoleVariableRef CVARDebugInteractiveDrawing(
 	TEXT("Draw Debug Lines for Interaction"),
 	ECVF_Cheat);
 
-bool GameDebugger::IsDebugWeaponEnable()
+bool GameDebuggerNew::IsDebugWeaponEnable()
 {
 	return DebugWeaponDrawing > 0;
 }
 
-bool GameDebugger::IsDebugInteractionEnable()
+bool GameDebuggerNew::IsDebugInteractionEnable()
 {
 	return DebugInteractiveDrawing > 0;
 }

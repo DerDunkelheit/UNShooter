@@ -6,7 +6,7 @@
 
 #include "DrawDebugHelpers.h"
 #include "TPPShooter/Interfaces/Interactable.h"
-#include "TPPShooter/NonUClasses/GameDebugger.h"
+#include "TPPShooter/NonUClasses/GameDebuggerNew.h"
 
 // Sets default values for this component's properties
 UInteractionComponent::UInteractionComponent()
@@ -63,7 +63,7 @@ void UInteractionComponent::TryInteract()
 			}
 		}
 
-		if (GameDebugger::IsDebugInteractionEnable())
+		if (GameDebuggerNew::IsDebugInteractionEnable())
 		{
 			DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::Orange, false, 2);
 		}

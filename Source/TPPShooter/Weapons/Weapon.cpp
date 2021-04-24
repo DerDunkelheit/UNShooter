@@ -6,7 +6,7 @@
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
 #include "TPPShooter/TPPShooterCharacter.h"
-#include "TPPShooter/NonUClasses/GameDebugger.h"
+#include "TPPShooter/NonUClasses/GameDebuggerNew.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -95,7 +95,7 @@ void AWeapon::Fire()
 		OnFire();
 		AmmoComponent->ConsumeAmmo();
 
-		if (GameDebugger::IsDebugWeaponEnable())
+		if (GameDebuggerNew::IsDebugWeaponEnable())
 		{
 			DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::White, false, 1, 0, 1);
 		}
