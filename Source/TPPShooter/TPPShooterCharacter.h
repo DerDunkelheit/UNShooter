@@ -87,6 +87,14 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void DieEvent();
 
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+	FName CharacterWeaponSocket;
+	UFUNCTION(BlueprintCallable)
+	void SetupInitialWeapon();
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Weapon")
+	TSubclassOf<AWeapon> InitialWeapon;
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
@@ -113,7 +121,7 @@ public:
 	FTransform GetItemDropTransform() { return ItemDropPosition->GetComponentTransform(); }
 
 	//TODO: came up with better solution.
-	UInventoryComponent* GetInventoryComponent() const {return Inventory;}
+	UInventoryComponent*  GetInventoryComponent() const {return Inventory;}
 
 private:
 	void StartFire();

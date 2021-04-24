@@ -53,6 +53,8 @@ ATPPShooterCharacter::ATPPShooterCharacter()
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>("HealthComponent");
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("InteractionComponent");
 	ZoomComponent = CreateDefaultSubobject<UZoomComponent>(TEXT("Zoom Component"));
+
+	CharacterWeaponSocket = "Weapon_Socket";
 }
 
 
@@ -60,12 +62,11 @@ void ATPPShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	HealthComponent->OnHealthDepleted.AddDynamic(this,&ATPPShooterCharacter::DieEvent);
+	HealthComponent->OnHealthDepleted.AddDynamic(this, &ATPPShooterCharacter::DieEvent);
 }
 
 void ATPPShooterCharacter::Tick(float DeltaSeconds)
 {
-	
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -79,12 +80,12 @@ void ATPPShooterCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &ATPPShooterCharacter::BeginCrouch);
 	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &ATPPShooterCharacter::EndCrouch);
-	PlayerInputComponent->BindAction("Interact",IE_Pressed, InteractionComponent, &UInteractionComponent::TryInteract);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, InteractionComponent, &UInteractionComponent::TryInteract);
 	PlayerInputComponent->BindAction("Zoom", IE_Pressed, ZoomComponent, &UZoomComponent::StartZoom);
 	PlayerInputComponent->BindAction("Zoom", IE_Released, ZoomComponent, &UZoomComponent::EndZoom);
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ATPPShooterCharacter::StartFire);
 	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &ATPPShooterCharacter::EndFire);
-	PlayerInputComponent->BindAction("Reload",IE_Pressed, this, &ATPPShooterCharacter::ReloadWeapon);
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ATPPShooterCharacter::ReloadWeapon);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ATPPShooterCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ATPPShooterCharacter::MoveRight);
@@ -94,7 +95,7 @@ void ATPPShooterCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 
 void ATPPShooterCharacter::UseItem(UItem* Item)
 {
-	if(Item)
+	if (Item)
 	{
 		Item->Use(this);
 	}
@@ -102,7 +103,7 @@ void ATPPShooterCharacter::UseItem(UItem* Item)
 
 void ATPPShooterCharacter::RemoveItemFormInventory(UItem* Item)
 {
-	if(Item)
+	if (Item)
 	{
 		Inventory->RemoveItem(Item);
 	}
@@ -110,7 +111,7 @@ void ATPPShooterCharacter::RemoveItemFormInventory(UItem* Item)
 
 void ATPPShooterCharacter::AddItemToInventory(UItem* Item)
 {
-	if(Item)
+	if (Item)
 	{
 		Inventory->AddItem(Item);
 	}
@@ -118,7 +119,7 @@ void ATPPShooterCharacter::AddItemToInventory(UItem* Item)
 
 void ATPPShooterCharacter::DropItem(UItem* Item)
 {
-	if(Item)
+	if (Item)
 	{
 		Inventory->DropItem(Item);
 	}
@@ -126,7 +127,7 @@ void ATPPShooterCharacter::DropItem(UItem* Item)
 
 FVector ATPPShooterCharacter::GetPawnViewLocation() const
 {
-	if(FollowCamera)
+	if (FollowCamera)
 	{
 		return FollowCamera->GetComponentLocation();
 	}
@@ -177,10 +178,10 @@ void ATPPShooterCharacter::MoveRight(float Value)
 
 void ATPPShooterCharacter::BeginCrouch()
 {
-    if(!GetCharacterMovement()->IsFalling())
-    {
-    	Crouch();
-    }
+	if (!GetCharacterMovement()->IsFalling())
+	{
+		Crouch();
+	}
 }
 
 void ATPPShooterCharacter::EndCrouch()
@@ -188,9 +189,18 @@ void ATPPShooterCharacter::EndCrouch()
 	UnCrouch();
 }
 
+void ATPPShooterCharacter::SetupInitialWeapon()
+{
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	CurrentWeapon = GetWorld()->SpawnActor<AWeapon>(InitialWeapon, FVector::ZeroVector, FRotator::ZeroRotator,SpawnParameters);
+	CurrentWeapon->SetOwner(this);
+	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, CharacterWeaponSocket);
+}
+
 void ATPPShooterCharacter::StartFire()
 {
-	if(CurrentWeapon)
+	if (CurrentWeapon)
 	{
 		CurrentWeapon->StartFire();
 		bUseControllerRotationYaw = true;
@@ -199,7 +209,7 @@ void ATPPShooterCharacter::StartFire()
 
 void ATPPShooterCharacter::EndFire()
 {
-	if(CurrentWeapon)
+	if (CurrentWeapon)
 	{
 		CurrentWeapon->EndFire();
 		bUseControllerRotationYaw = false;
@@ -208,9 +218,9 @@ void ATPPShooterCharacter::EndFire()
 
 void ATPPShooterCharacter::ReloadWeapon()
 {
-	if(CurrentWeapon)
+	if (CurrentWeapon)
 	{
-		if(CurrentWeapon->TryReload())
+		if (CurrentWeapon->TryReload())
 		{
 			//TODO: start reload animation.
 		}
