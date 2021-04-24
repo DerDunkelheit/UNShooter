@@ -6,14 +6,7 @@
 
 #include "DrawDebugHelpers.h"
 #include "TPPShooter/Interfaces/Interactable.h"
-
-//TODO: create a class for console variables.
-static int32 DebugInteractiveDrawing = 0;
-FAutoConsoleVariableRef CVARDebugInteractiveDrawing(
-    TEXT("Game.DebugInteraction"),
-    DebugInteractiveDrawing,
-    TEXT("Draw Debug Lines for Interaction"),
-    ECVF_Cheat);
+#include "TPPShooter/NonUClasses/GameDebuger.h"
 
 // Sets default values for this component's properties
 UInteractionComponent::UInteractionComponent()
@@ -70,7 +63,7 @@ void UInteractionComponent::TryInteract()
 			}
 		}
 
-		if (DebugInteractiveDrawing > 0)
+		if (GameDebuger::IsDebugInteractionEnable())
 		{
 			DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::Orange, false, 2);
 		}

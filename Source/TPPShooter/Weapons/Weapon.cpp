@@ -6,13 +6,7 @@
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
 #include "TPPShooter/TPPShooterCharacter.h"
-
-static int32 DebugWeaponDrawing = 0;
-FAutoConsoleVariableRef CVARDebugWeaponDrawing(
-	TEXT("Game.DebugWeapons"),
-	DebugWeaponDrawing,
-	TEXT("Draw Debug Lines for Weapons"),
-	ECVF_Cheat);
+#include "TPPShooter/NonUClasses/GameDebuger.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -101,7 +95,7 @@ void AWeapon::Fire()
 		OnFire();
 		AmmoComponent->ConsumeAmmo();
 
-		if (DebugWeaponDrawing > 0)
+		if (GameDebuger::IsDebugWeaponEnable())
 		{
 			DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::White, false, 1, 0, 1);
 		}
