@@ -42,7 +42,6 @@ void AWeapon::Tick(float DeltaTime)
 
 void AWeapon::StartFire()
 {
-	//TODO: create fire modes, for that we can use common interface in which we'll write shooting logic
 	float FirstDelay = FMath::Max(LastFireTime + TimerBetweenShot - GetWorld()->TimeSeconds, 0.0f);
 
 	GetWorldTimerManager().SetTimer(TimerHandle_TimeBetweenShots, this, &AWeapon::Fire, TimerBetweenShot, true, FirstDelay);
