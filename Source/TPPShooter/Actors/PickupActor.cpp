@@ -32,5 +32,13 @@ void APickupActor::Interact_Implementation()
 void APickupActor::SetItem(UItem* Item)
 {
 	CurrentItem = Item;
+
+	if(Item->PickupMesh)
+	{
+		//TODO: we have to set it because pickup Actor is used cube as a default spawn object but cube is to big and we manually set in to 0.2 scale
+		SetActorScale3D(FVector::OneVector);
+		
+		MeshComponent->SetStaticMesh(Item->PickupMesh);
+	}
 }
 

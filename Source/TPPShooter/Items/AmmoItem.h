@@ -10,7 +10,6 @@
 #include "AmmoItem.generated.h"
 
 UCLASS()
-//TODO: remove click text in tooltip field.
 class TPPSHOOTER_API UAmmoItem : public UItem
 {
 	GENERATED_BODY()

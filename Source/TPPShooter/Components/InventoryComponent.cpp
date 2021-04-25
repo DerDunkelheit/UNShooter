@@ -107,7 +107,6 @@ void UInventoryComponent::DropItem(UItem* Item)
 
 	OnInventoryUpdated.Broadcast();
 
-	//TODO: add mesh to drop item.
 	auto Player = Cast<ATPPShooterCharacter>(GetOwner());
 	auto PickUpItem = GetWorld()->SpawnActor<APickupActor>(DropItemPrefab, Player->GetItemDropTransform().GetLocation(),
 	                                                       Player->GetItemDropTransform().Rotator());
