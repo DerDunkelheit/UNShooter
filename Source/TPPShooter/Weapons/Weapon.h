@@ -45,7 +45,7 @@ protected:
 	UParticleSystem* ImpactEffect;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnPlayerDied();
+	void OnOwnerDied();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnFire();
@@ -57,9 +57,9 @@ public:
 	void StartFire();
 	void EndFire();
 	bool TryReload() const { return AmmoComponent->TryReload(); }
+	void Subscribe();
 
 private:
-	void Subscribe();
 	void Fire();
 
 	float LastFireTime;

@@ -28,8 +28,6 @@ void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Subscribe();
-
 	TimerBetweenShot = 60 / RateOfFire;
 	LastFireTime = -1;
 }
@@ -44,7 +42,8 @@ void AWeapon::StartFire()
 {
 	float FirstDelay = FMath::Max(LastFireTime + TimerBetweenShot - GetWorld()->TimeSeconds, 0.0f);
 
-	GetWorldTimerManager().SetTimer(TimerHandle_TimeBetweenShots, this, &AWeapon::Fire, TimerBetweenShot, true, FirstDelay);
+	GetWorldTimerManager().SetTimer(TimerHandle_TimeBetweenShots, this, &AWeapon::Fire, TimerBetweenShot, true,
+	                                FirstDelay);
 }
 
 void AWeapon::EndFire()
@@ -54,14 +53,14 @@ void AWeapon::EndFire()
 
 void AWeapon::Fire()
 {
-    if(!AmmoComponent->HasAmmo())
-    {
-    	//TODO: add empty mag sound.
+	if (!AmmoComponent->HasAmmo())
+	{
+		//TODO: add empty mag sound.
 
-    	GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Red,"No ammo");
-    	return;
-    }
-	 
+		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Red, "No ammo");
+		return;
+	}
+
 	AActor* MyOwner = GetOwner();
 	if (MyOwner)
 	{
@@ -105,9 +104,9 @@ void AWeapon::Fire()
 
 void AWeapon::Subscribe()
 {
-	auto Player = Cast<ATPPShooterCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	if (Player)
+	auto WeaponOwner = Cast<ATPPShooterCharacter>(GetOwner());
+	if (WeaponOwner)
 	{
-		Player->HealthComponent->OnHealthDepleted.AddDynamic(this, &AWeapon::OnPlayerDied);
+		WeaponOwner->HealthComponent->OnHealthDepleted.AddDynamic(this, &AWeapon::OnOwnerDied);
 	}
 }
