@@ -193,9 +193,8 @@ void ATPPShooterCharacter::SetupInitialWeapon()
 {
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParameters.Owner = this;
 	CurrentWeapon = GetWorld()->SpawnActor<AWeapon>(InitialWeapon, FVector::ZeroVector, FRotator::ZeroRotator,SpawnParameters);
-	CurrentWeapon->SetOwner(this);
-	CurrentWeapon->Subscribe();
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, CharacterWeaponSocket);
 }
 

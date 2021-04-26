@@ -57,9 +57,9 @@ public:
 	void StartFire();
 	void EndFire();
 	bool TryReload() const { return AmmoComponent->TryReload(); }
-	void Subscribe();
 
 private:
+	void Subscribe();
 	void Fire();
 
 	float LastFireTime;

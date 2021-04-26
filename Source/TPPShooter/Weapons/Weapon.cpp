@@ -28,6 +28,8 @@ void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Subscribe();
+	
 	TimerBetweenShot = 60 / RateOfFire;
 	LastFireTime = -1;
 }
