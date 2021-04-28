@@ -30,7 +30,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	float Damage;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon",meta = (Tooltip = "Shots per second"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon", meta = (Tooltip = "Shots per second"))
 	float RateOfFire;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
@@ -43,6 +43,9 @@ protected:
 	UParticleSystem* MuzzleEffect;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	UParticleSystem* ImpactEffect;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+	TSubclassOf<AActor> WeaponMagazine;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnOwnerDied();
@@ -57,6 +60,7 @@ public:
 	void StartFire();
 	void EndFire();
 	bool TryReload() const { return AmmoComponent->TryReload(); }
+	TSubclassOf<AActor> GetWeaponMagazine() const { return WeaponMagazine; }
 
 private:
 	void Subscribe();

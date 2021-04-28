@@ -28,6 +28,9 @@ class ATPPShooterCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
 	class UInventoryComponent* Inventory;
 
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = "Animation", meta = (AllowPrivateAccess = "true"))
+	bool bReload;
+
 public:
 	ATPPShooterCharacter();
 

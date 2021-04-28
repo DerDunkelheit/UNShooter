@@ -67,6 +67,7 @@ void ATPPShooterCharacter::BeginPlay()
 
 void ATPPShooterCharacter::Tick(float DeltaSeconds)
 {
+	Super::Tick(DeltaSeconds);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -200,7 +201,7 @@ void ATPPShooterCharacter::SetupInitialWeapon()
 
 void ATPPShooterCharacter::StartFire()
 {
-	if (CurrentWeapon)
+	if (CurrentWeapon && !bReload)
 	{
 		CurrentWeapon->StartFire();
 		bUseControllerRotationYaw = true;
@@ -218,11 +219,11 @@ void ATPPShooterCharacter::EndFire()
 
 void ATPPShooterCharacter::ReloadWeapon()
 {
-	if (CurrentWeapon)
+	if (CurrentWeapon && !bIsCrouched)
 	{
 		if (CurrentWeapon->TryReload())
 		{
-			//TODO: start reload animation.
+			bReload = true;
 		}
 	}
 }
