@@ -221,9 +221,12 @@ void ATPPShooterCharacter::ReloadWeapon()
 {
 	if (CurrentWeapon && !bIsCrouched)
 	{
-		if (CurrentWeapon->TryReload())
+		if(!bReload)
 		{
-			bReload = true;
+			if (CurrentWeapon->TryReload())
+			{
+				bReload = true;
+			}
 		}
 	}
 }

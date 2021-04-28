@@ -53,6 +53,8 @@ bool UAmmoComponent::TryReload()
 	auto Player = Cast<ATPPShooterCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	if(Player)
 	{
+        if(CurrentAmmo == MaxAmmo) return false;
+		
 		UItem* AmmoItem = Player->GetInventoryComponent()->TryGetAmmoItem(AmmoType);
 		if(AmmoItem)
 		{
