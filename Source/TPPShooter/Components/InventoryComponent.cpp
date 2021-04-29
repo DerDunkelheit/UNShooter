@@ -144,6 +144,24 @@ int UInventoryComponent::RequestAmmoFromInventory(UAmmoItem* AmmoItem, int Reque
 	return 0;
 }
 
+int UInventoryComponent::GetAmmoQuantity(AmmoTypeEnum AmmoType)
+{
+	//TODO: replace to method.
+	for (auto Item : Items)
+	{
+		UAmmoItem* AmmoItem = Cast<UAmmoItem>(Item);
+		if (AmmoItem)
+		{
+			if (AmmoItem->AmmoType == AmmoType)
+			{
+				return AmmoItem->Quantity;
+			}
+		}
+	}
+
+	return 0;
+}
+
 int UInventoryComponent::CalculateRequestedAmmo(UAmmoItem* AmmoItem, int RequestedQuantity)
 {
 	if (AmmoItem->Quantity > RequestedQuantity)

@@ -43,6 +43,9 @@ protected:
 
 public:
 
+    UFUNCTION(BlueprintCallable)
+	int GetAmmoQuantity(AmmoTypeEnum AmmoType);
+	
 	void AddItem(class UItem* Item);
 	void RemoveItem(class UItem* Item);
 	void DropItem(class UItem* Item);
