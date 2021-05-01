@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CustomGameInstance.h"
+#include "TPPShooter/public/CustomGameInstance.h"
 
 UCustomGameInstance::UCustomGameInstance()
 { }

@@ -4,8 +4,8 @@
 #include "InventoryComponent.h"
 
 #include "TPPShooter/Actors/PickupActor.h"
-#include "TPPShooter/Items/AmmoItem.h"
-#include "TPPShooter/Items/Item.h"
+#include "TPPShooter/public/Items/AmmoItem.h"
+#include "TPPShooter/public/Items/Item.h"
 
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()

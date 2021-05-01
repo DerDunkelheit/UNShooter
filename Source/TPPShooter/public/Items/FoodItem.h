@@ -3,7 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Item.h"
+#include "TPPShooter/public/Items/Item.h"
+
 #include "FoodItem.generated.h"
 
 /**

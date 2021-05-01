@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 
-#include "Components/InventoryComponent.h"
 #include "Engine/GameInstance.h"
 #include "CustomGameInstance.generated.h"
 

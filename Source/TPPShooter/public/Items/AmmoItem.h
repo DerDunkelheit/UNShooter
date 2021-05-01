@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "TPPShooter/Enums/AmmoTypeEnum.h"
-#include "TPPShooter/Items/Item.h"
+#include "TPPShooter/public/Items/Item.h"
 
 #include "AmmoItem.generated.h"
 

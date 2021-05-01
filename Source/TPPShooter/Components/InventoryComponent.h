@@ -7,7 +7,6 @@
 #include "TPPShooter/Actors/PickupActor.h"
 #include "TPPShooter/Enums/AmmoTypeEnum.h"
 
-
 #include "InventoryComponent.generated.h"
 
 //Blueprints will bind to this to update the UI.

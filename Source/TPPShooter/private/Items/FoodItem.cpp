@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "FoodItem.h"
+#include "TPPShooter/public/Items/FoodItem.h"
 
 UFoodItem::UFoodItem()
 {

@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "TPPShooterGameMode.h"
-#include "TPPShooterCharacter.h"
+#include "TPPShooter/public/TPPShooterGameMode.h"
+
 #include "UObject/ConstructorHelpers.h"
 
 ATPPShooterGameMode::ATPPShooterGameMode()

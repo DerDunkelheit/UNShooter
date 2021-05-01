@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "TPPShooter/Interfaces/Interactable.h"
-#include "TPPShooter/Items/Item.h"
+#include "TPPShooter/public/Items/Item.h"
 
 #include "PickupActor.generated.h"
 

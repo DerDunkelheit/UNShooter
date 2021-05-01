@@ -5,7 +5,7 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "TPPShooter/TPPShooterCharacter.h"
-#include "TPPShooter/Items/AmmoItem.h"
+#include "TPPShooter/public/Items/AmmoItem.h"
 
 // Sets default values for this component's properties
 UAmmoComponent::UAmmoComponent()

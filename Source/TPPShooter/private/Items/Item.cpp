@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Item.h"
+#include "TPPShooter/public/Items/Item.h"
 
 UItem::UItem()
 {
