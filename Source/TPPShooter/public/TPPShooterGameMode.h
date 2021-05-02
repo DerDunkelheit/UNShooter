@@ -13,6 +13,8 @@ class ATPPShooterGameMode : public AGameModeBase
 
 public:
 	ATPPShooterGameMode();
+
+	virtual void BeginPlay() override;
 };
 
 

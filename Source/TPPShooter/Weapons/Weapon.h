@@ -58,6 +58,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void StartFire();
+	UFUNCTION(BlueprintCallable)
 	void EndFire();
 	bool TryReload() const { return AmmoComponent->TryReload(); }
 	TSubclassOf<AActor> GetWeaponMagazine() const { return WeaponMagazine; }

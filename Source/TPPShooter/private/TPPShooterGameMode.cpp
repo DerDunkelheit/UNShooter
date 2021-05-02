@@ -2,7 +2,8 @@
 
 #include "TPPShooter/public/TPPShooterGameMode.h"
 
-#include "UObject/ConstructorHelpers.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 ATPPShooterGameMode::ATPPShooterGameMode()
 {
@@ -12,4 +13,11 @@ ATPPShooterGameMode::ATPPShooterGameMode()
 	//{
 	//	DefaultPawnClass = PlayerPawnBPClass.Class;
 	//}
+}
+
+void ATPPShooterGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	UWidgetBlueprintLibrary::SetInputMode_GameOnly(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 }

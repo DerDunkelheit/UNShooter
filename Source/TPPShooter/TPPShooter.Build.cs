@@ -15,7 +15,8 @@ public class TPPShooter : ModuleRules
 			"Engine", 
 			"InputCore", 
 			"HeadMountedDisplay", 
-			"NavigationSystem"
+			"NavigationSystem",
+			"UMG",
 		});
 	}
 }
