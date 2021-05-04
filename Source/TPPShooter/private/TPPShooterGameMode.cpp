@@ -2,6 +2,7 @@
 
 #include "TPPShooter/public/TPPShooterGameMode.h"
 
+#include "LogSystem.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -20,4 +21,6 @@ void ATPPShooterGameMode::BeginPlay()
 	Super::BeginPlay();
 
 	UWidgetBlueprintLibrary::SetInputMode_GameOnly(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	int test = 5;
+	ULogSystem::Message(FString::Printf(TEXT("value: %d"), test), FColor::Orange);
 }

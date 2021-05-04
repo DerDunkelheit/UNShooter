@@ -17,6 +17,7 @@ public class TPPShooter : ModuleRules
 			"HeadMountedDisplay", 
 			"NavigationSystem",
 			"UMG",
+			"CustomLog"
 		});
 	}
 }
