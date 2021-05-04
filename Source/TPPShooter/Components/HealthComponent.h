@@ -22,6 +22,9 @@ public:
 	void TakeDamage(AActor* DamagedActor,float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
 	UFUNCTION(BlueprintCallable)
+	void TakePointDamage(AActor* DamagedActor, float Damage, class AController* InstigatedBy, FVector HitLocation, class UPrimitiveComponent* FHitComponent, FName BoneName, FVector ShotFromDirection, const class UDamageType* DamageType, AActor* DamageCauser);
+
+	UFUNCTION(BlueprintCallable)
 	void RestoreHealth(float Value);
 
 	UFUNCTION(BlueprintCallable)
@@ -39,9 +42,13 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
 	bool bDebugMode = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
+	TMap<FString, int> VulnerableBonesMap;
 	
 private:
 	float CurrentHealth;
+	float DamageMultiply;
 
 	void TriggerDie() {OnHealthDepleted.Broadcast();};
 };

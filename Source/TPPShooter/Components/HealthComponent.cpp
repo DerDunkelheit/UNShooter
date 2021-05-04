@@ -24,6 +24,7 @@ void UHealthComponent::BeginPlay()
 	if (Owner)
 	{
 		Owner->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::TakeDamage);
+		Owner->OnTakePointDamage.AddDynamic(this, &UHealthComponent::TakePointDamage);
 	}
 }
 
@@ -40,7 +41,9 @@ void UHealthComponent::RestoreHealth(float Value)
 void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
                                   AController* InstigatedBy, AActor* DamageCauser)
 {
-	CurrentHealth -= Damage;
+	const float DamageToDo = DamageMultiply != 0 ? Damage * DamageMultiply : Damage;
+	CurrentHealth -= DamageToDo;
+	DamageMultiply = 0;
 	
 	if(bDebugMode)
 	{
@@ -50,5 +53,22 @@ void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDam
 	if (CurrentHealth <= 0)
 	{
 		TriggerDie();
+	}
+}
+
+void UHealthComponent::TakePointDamage(AActor* DamagedActor, float Damage, AController* InstigatedBy,
+	FVector HitLocation, UPrimitiveComponent* FHitComponent, FName BoneName, FVector ShotFromDirection,
+	const UDamageType* DamageType, AActor* DamageCauser)
+{
+	if(VulnerableBonesMap.Num() > 0)
+	{
+		for (auto pair : VulnerableBonesMap)
+		{
+			if(pair.Key == BoneName.ToString())
+			{
+				DamageMultiply = pair.Value;
+				return;
+			}
+		}
 	}
 }
