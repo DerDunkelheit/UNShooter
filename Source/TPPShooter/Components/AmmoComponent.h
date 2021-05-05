@@ -37,6 +37,9 @@ private:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings", meta = (AllowPrivateAccess = true))
 	AmmoTypeEnum AmmoType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings", meta = (AllowPrivateAccess = true))
+	TSubclassOf<AActor> BulletShellClass;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Settings")
     int InitialAmmo;
