@@ -55,11 +55,11 @@ bool UAmmoComponent::TryReload()
 	{
         if(CurrentAmmo == MaxAmmo) return false;
 		
-		UItem* AmmoItem = Player->GetInventoryComponent()->TryGetAmmoItem(AmmoType);
+		UAmmoItem* AmmoItem = Player->GetInventoryComponent()->TryGetAmmoItem(AmmoType);
 		if(AmmoItem)
 		{
 			int AmountToRequest = MaxAmmo - CurrentAmmo;
-			CurrentAmmo += Player->GetInventoryComponent()->RequestAmmoFromInventory(Cast<UAmmoItem>(AmmoItem), AmountToRequest);
+			CurrentAmmo += Player->GetInventoryComponent()->RequestAmmoFromInventory(AmmoItem, AmountToRequest);
 			return true;
 		}
 	}

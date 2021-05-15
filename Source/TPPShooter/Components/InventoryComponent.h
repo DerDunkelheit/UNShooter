@@ -48,9 +48,10 @@ public:
 	void AddItem(class UItem* Item);
 	void RemoveItem(class UItem* Item);
 	void DropItem(class UItem* Item);
-	UItem* TryGetAmmoItem(AmmoTypeEnum AmmoType);
+	class UAmmoItem* TryGetAmmoItem(AmmoTypeEnum AmmoType);
 	int RequestAmmoFromInventory(class UAmmoItem* AmmoItem, int RequestedQuantity);
 
 private:
 	int CalculateRequestedAmmo(class UAmmoItem* AmmoItem, int RequestedQuantity);
+	UAmmoItem* FindAmmoItem(AmmoTypeEnum AmmoType);
 };

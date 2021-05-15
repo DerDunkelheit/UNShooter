@@ -114,23 +114,9 @@ void UInventoryComponent::DropItem(UItem* Item)
 	PickUpItem->SetItem(Item);
 }
 
-UItem* UInventoryComponent::TryGetAmmoItem(AmmoTypeEnum AmmoType)
+UAmmoItem* UInventoryComponent::TryGetAmmoItem(AmmoTypeEnum AmmoType)
 {
-	//TODO: it's not very optimal.
-
-	for (auto Item : Items)
-	{
-		UAmmoItem* AmmoItem = Cast<UAmmoItem>(Item);
-		if (AmmoItem)
-		{
-			if (AmmoItem->AmmoType == AmmoType)
-			{
-				return AmmoItem;
-			}
-		}
-	}
-
-	return nullptr;
+	return FindAmmoItem(AmmoType);
 }
 
 int UInventoryComponent::RequestAmmoFromInventory(UAmmoItem* AmmoItem, int RequestedQuantity)
@@ -141,24 +127,6 @@ int UInventoryComponent::RequestAmmoFromInventory(UAmmoItem* AmmoItem, int Reque
 	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "ERROR! AmmoItem wasn't found in Inventory!");
-	return 0;
-}
-
-int UInventoryComponent::GetAmmoQuantity(AmmoTypeEnum AmmoType)
-{
-	//TODO: replace to method.
-	for (auto Item : Items)
-	{
-		UAmmoItem* AmmoItem = Cast<UAmmoItem>(Item);
-		if (AmmoItem)
-		{
-			if (AmmoItem->AmmoType == AmmoType)
-			{
-				return AmmoItem->Quantity;
-			}
-		}
-	}
-
 	return 0;
 }
 
@@ -175,4 +143,31 @@ int UInventoryComponent::CalculateRequestedAmmo(UAmmoItem* AmmoItem, int Request
 	RemoveItem(AmmoItem);
 
 	return ReturnValue;
+}
+
+int UInventoryComponent::GetAmmoQuantity(AmmoTypeEnum AmmoType)
+{
+	const auto AppropriateAmmo = FindAmmoItem(AmmoType);
+	if (AppropriateAmmo != nullptr)
+	{
+		return AppropriateAmmo->Quantity;
+	}
+
+	return 0;
+}
+
+UAmmoItem* UInventoryComponent::FindAmmoItem(AmmoTypeEnum AmmoType)
+{
+	for (auto Item : Items)
+	{
+		UAmmoItem* AmmoItem = Cast<UAmmoItem>(Item);
+		if (AmmoItem)
+		{
+			if (AmmoItem->AmmoType == AmmoType)
+			{
+				return AmmoItem;
+			}
+		}
+	}
+	return nullptr;
 }
