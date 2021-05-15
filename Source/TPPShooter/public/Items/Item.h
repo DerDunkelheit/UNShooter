@@ -6,7 +6,7 @@
 
 #include "TPPShooter/TPPShooterCharacter.h"
 #include "UObject/NoExportTypes.h"
-#include "TPPShooter/Components/InventoryComponent.h"
+#include "Components/InventoryComponent.h"
 #include "Item.generated.h"
 
 //TODO: create max item stacks

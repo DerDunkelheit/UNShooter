@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "InteractionComponent.h"
+#include "Components/InteractionComponent.h"
 
 
 #include "DrawDebugHelpers.h"

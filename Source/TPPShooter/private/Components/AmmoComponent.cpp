@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AmmoComponent.h"
+#include "Components/AmmoComponent.h"
 
 #include "Kismet/GameplayStatics.h"
 #include "TPPShooter/TPPShooterCharacter.h"

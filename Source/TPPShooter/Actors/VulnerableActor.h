@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "TPPShooter/Components/HealthComponent.h"
+#include "Components/HealthComponent.h"
 
 #include "VulnerableActor.generated.h"
 

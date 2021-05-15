@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "InventoryComponent.h"
+#include "Components/InventoryComponent.h"
 
 #include "TPPShooter/Actors/PickupActor.h"
 #include "TPPShooter/public/Items/AmmoItem.h"

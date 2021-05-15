@@ -7,7 +7,7 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/Pawn.h"
 #include "PhysicsEngine/RadialForceComponent.h"
-#include "TPPShooter/Components/HealthComponent.h"
+#include "Components/HealthComponent.h"
 
 #include "STrackerBot.generated.h"
 

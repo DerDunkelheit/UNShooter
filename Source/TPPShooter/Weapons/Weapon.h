@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "TPPShooter/Components/AmmoComponent.h"
+#include "Components/AmmoComponent.h"
 
 #include "Weapon.generated.h"
 
