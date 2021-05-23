@@ -36,4 +36,3 @@ void AVulnerableActor::SelfDestroy_Implementation()
 {
 	
 }
-
