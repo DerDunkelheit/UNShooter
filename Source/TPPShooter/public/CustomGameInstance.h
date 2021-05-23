@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
 #include "Engine/GameInstance.h"
+#include "TPPShooter/MinecraftCrfatingSystem/CraftingManager.h"
+
 #include "CustomGameInstance.generated.h"
 
 /**
@@ -18,4 +19,13 @@ class TPPSHOOTER_API UCustomGameInstance : public UGameInstance
 public:
 	UCustomGameInstance();
 
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Classes")
+	TSubclassOf<UCraftingManager> CraftingManagerClass;
+
+	UFUNCTION(BlueprintPure, Category = "Persistence",meta = (DisplayName = "Get Crafting Manager", Keywords = "CraftingManager"))
+	UCraftingManager* CraftingManager();
+
+private:
+	UPROPERTY(Transient)
+	UCraftingManager* CraftingManagerInstance;
 };
