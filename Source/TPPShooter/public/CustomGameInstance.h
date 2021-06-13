@@ -7,7 +7,6 @@
 #include "TPPShooter/DialoguesSystem/DialoguesManager.h"
 #include "TPPShooter/MinecraftCrfatingSystem/CraftingManager.h"
 
-#include "Engine/GameInstance.h"
 #include "CustomGameInstance.generated.h"
 
 /**

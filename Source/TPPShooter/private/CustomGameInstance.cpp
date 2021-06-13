@@ -4,7 +4,8 @@
 #include "TPPShooter/public/CustomGameInstance.h"
 
 UCustomGameInstance::UCustomGameInstance()
-{ }
+{
+}
 
 UCraftingManager* UCustomGameInstance::CraftingManager()
 {
