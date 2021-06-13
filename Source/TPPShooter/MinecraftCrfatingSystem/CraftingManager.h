@@ -21,4 +21,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced)
 	TArray<UMinecraftItem*> DefaultItems;
+
+	UFUNCTION(BlueprintCallable)
+	void Test();
 };
