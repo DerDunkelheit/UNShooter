@@ -35,7 +35,7 @@ private:
     UPROPERTY(EditAnywhere, Category = "Settings")
 	bool bUseAmmo;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings", meta = (AllowPrivateAccess = true))
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings", meta = (AllowPrivateAccess = true, EditCondition = "bUseAmmo"))
 	AmmoTypeEnum AmmoType;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings", meta = (AllowPrivateAccess = true))

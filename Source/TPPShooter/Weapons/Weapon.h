@@ -63,9 +63,11 @@ public:
 	bool TryReload() const { return AmmoComponent->TryReload(); }
 	TSubclassOf<AActor> GetWeaponMagazine() const { return WeaponMagazine; }
 
+protected:
+	virtual void Fire();
+
 private:
 	void Subscribe();
-	void Fire();
 
 	float LastFireTime;
 	float TimerBetweenShot;

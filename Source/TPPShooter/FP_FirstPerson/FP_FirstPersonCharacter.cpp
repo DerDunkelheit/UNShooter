@@ -8,11 +8,9 @@
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "GameFramework/PlayerController.h"
 #include "TPPShooter/NonUClasses/GameDebuggerNew.h"
 
 #define COLLISION_WEAPON		ECC_GameTraceChannel1
-
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
 //////////////////////////////////////////////////////////////////////////
@@ -22,10 +20,6 @@ AFP_FirstPersonCharacter::AFP_FirstPersonCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-
-	// Set our turn rates for input
-	BaseTurnRate = 45.f;
-	BaseLookUpRate = 45.f;
 
 	// Create a CameraComponent	
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
@@ -40,13 +34,6 @@ AFP_FirstPersonCharacter::AFP_FirstPersonCharacter()
 	Mesh1P->bCastDynamicShadow = false;			// Disallow mesh to cast dynamic shadows
 	Mesh1P->CastShadow = false;				// Disallow mesh to cast other shadows
 
-	// Create a gun mesh component
-	FP_Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FP_Gun"));
-	FP_Gun->SetOnlyOwnerSee(true);			// Only the owning player will see this mesh
-	FP_Gun->bCastDynamicShadow = false;		// Disallow mesh to cast dynamic shadows
-	FP_Gun->CastShadow = false;			// Disallow mesh to cast other shadows
-	FP_Gun->SetupAttachment(Mesh1P, TEXT("GripPoint"));
-
 	// Set weapon damage and range
 	WeaponRange = 5000.0f;
 	WeaponDamage = 500000.0f;
@@ -58,6 +45,27 @@ AFP_FirstPersonCharacter::AFP_FirstPersonCharacter()
 	// derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+
+	CharacterWeaponSocket = "WeaponSocket";
+}
+
+void AFP_FirstPersonCharacter::SetupInitialWeapon()
+{
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParameters.Owner = this;
+	CurrentWeapon = GetWorld()->SpawnActor<AWeapon>(InitialWeapon, FVector::ZeroVector, FRotator::ZeroRotator,SpawnParameters);
+	CurrentWeapon->AttachToComponent(GetWeaponMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, CharacterWeaponSocket);
+}
+
+void AFP_FirstPersonCharacter::AddControllerYawInput(float Val)
+{
+	Super::AddControllerYawInput(Val * MouseSensitivity);
+}
+
+void AFP_FirstPersonCharacter::AddControllerPitchInput(float Val)
+{
+	Super::AddControllerPitchInput(Val * MouseSensitivity);
 }
 
 void AFP_FirstPersonCharacter::BeginPlay()
@@ -83,6 +91,7 @@ void AFP_FirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	
 	// Bind fire event
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AFP_FirstPersonCharacter::OnFire);
+	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &AFP_FirstPersonCharacter::EndFire);
 
 	// Bind movement events
 	PlayerInputComponent->BindAxis("MoveForward", this, &AFP_FirstPersonCharacter::MoveForward);
@@ -113,6 +122,11 @@ void AFP_FirstPersonCharacter::OnFire()
 		}
 	}
 
+	if(CurrentWeapon != nullptr)
+	{
+		CurrentWeapon->StartFire();
+	}
+
 	//TODO: replace to weapon class.
 	FVector EyeLocation;
 	FRotator EyeRotation;
@@ -136,6 +150,14 @@ void AFP_FirstPersonCharacter::OnFire()
 	if (GameDebuggerNew::IsDebugWeaponEnable())
 	{
 		DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::White, false, 1, 0, 1);
+	}
+}
+
+void AFP_FirstPersonCharacter::EndFire()
+{
+	if(CurrentWeapon != nullptr)
+	{
+		CurrentWeapon->EndFire();
 	}
 }
 

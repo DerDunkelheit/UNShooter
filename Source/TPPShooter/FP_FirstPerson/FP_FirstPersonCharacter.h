@@ -6,6 +6,8 @@
 
 #include "Components/HealthComponent.h"
 #include "GameFramework/Character.h"
+#include "TPPShooter/Weapons/Weapon.h"
+
 #include "FP_FirstPersonCharacter.generated.h"
 
 class UInputComponent;
@@ -20,27 +22,19 @@ class AFP_FirstPersonCharacter : public ACharacter
 	GENERATED_BODY()
 
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
-	UPROPERTY(VisibleDefaultsOnly, Category=Mesh)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Mesh, meta =  (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* Mesh1P;
-
-	/** Gun mesh */
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	USkeletalMeshComponent* FP_Gun;
 
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
 
+	//TODO: replace to setting menu.
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true", ClampMin = "0.0", ClampMax = "1.0"))
+	float MouseSensitivity;
+
 public:
 	AFP_FirstPersonCharacter();
-
-	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	float BaseTurnRate;
-
-	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	float BaseLookUpRate;
 
 	/** Gun muzzle's offset from the characters location */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
@@ -62,12 +56,30 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	float WeaponDamage;
 
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+	FName CharacterWeaponSocket;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
+	AWeapon* CurrentWeapon;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Weapon")
+	TSubclassOf<AWeapon> InitialWeapon;
+
+	UFUNCTION(BlueprintCallable)
+	void SetupInitialWeapon();
+
+	virtual void AddControllerYawInput(float Val) override;
+	virtual void AddControllerPitchInput(float Val) override;
+
 protected:
 
 	virtual void BeginPlay() override;
 	
 	/** Fires a virtual projectile. */
 	void OnFire();
+
+	void EndFire();
+	USkeletalMeshComponent* GetWeaponMesh() const { return Mesh1P; }
 
 	/** Handles moving forward/backward */
 	void MoveForward(float Val);

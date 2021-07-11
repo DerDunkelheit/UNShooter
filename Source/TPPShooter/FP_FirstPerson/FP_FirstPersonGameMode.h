@@ -13,6 +13,13 @@ class AFP_FirstPersonGameMode : public AGameModeBase
 
 public:
 	AFP_FirstPersonGameMode();
+
+	UFUNCTION(BlueprintCallable)
+    void OnTargetDied();
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game Rules")
+	int PointToWin;
 };
 
 
