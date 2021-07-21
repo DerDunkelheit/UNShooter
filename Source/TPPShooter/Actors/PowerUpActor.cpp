@@ -3,6 +3,7 @@
 
 #include "TPPShooter/Actors/PowerUpActor.h"
 
+#include "Kismet/GameplayStatics.h"
 #include "TPPShooter/FP_FirstPerson/FP_FirstPersonCharacter.h"
 
 // Sets default values
@@ -38,6 +39,14 @@ void APowerUpActor::OnOverlapBegin(
 	if (Cast<AFP_FirstPersonCharacter>(OtherActor))
 	{
 		Execute_Interact(this);
+	}
+}
+
+void APowerUpActor::PlayPickUpSound()
+{
+	if (PickUpSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), PickUpSound, GetActorLocation());
 	}
 }
 

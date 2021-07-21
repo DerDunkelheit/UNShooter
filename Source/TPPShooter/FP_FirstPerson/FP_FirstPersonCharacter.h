@@ -32,6 +32,7 @@ class AFP_FirstPersonCharacter : public ACharacter
 	//TODO: replace to setting menu.
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera,
 		meta = (AllowPrivateAccess = "true", ClampMin = "0.0", ClampMax = "1.0"))
+
 	float MouseSensitivity;
 
 public:
@@ -66,11 +67,15 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	TSubclassOf<AWeapon> InitialWeapon;
 
+public:
 	UFUNCTION(BlueprintCallable)
 	UAnimInstance* GetWeaponMeshAnimInstance() const { return Mesh1P->GetAnimInstance(); }
 
 	UFUNCTION(BlueprintCallable)
 	void SetupInitialWeapon();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void IncreaseTemporarySpeed(float AdditionalSpeedValue, float Duration);
 
 	virtual void AddControllerYawInput(float Val) override;
 	virtual void AddControllerPitchInput(float Val) override;
