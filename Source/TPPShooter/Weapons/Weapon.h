@@ -45,6 +45,12 @@ protected:
 	UParticleSystem* ImpactEffect;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+	UAnimMontage* FireAnimation;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+	USoundBase* FireSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	TSubclassOf<AActor> WeaponMagazine;
 
 	UFUNCTION(BlueprintImplementableEvent)

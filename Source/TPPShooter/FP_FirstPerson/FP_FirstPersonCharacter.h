@@ -22,7 +22,7 @@ class AFP_FirstPersonCharacter : public ACharacter
 	GENERATED_BODY()
 
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Mesh, meta =  (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Mesh, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* Mesh1P;
 
 	/** First person camera */
@@ -30,7 +30,8 @@ class AFP_FirstPersonCharacter : public ACharacter
 	UCameraComponent* FirstPersonCameraComponent;
 
 	//TODO: replace to setting menu.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true", ClampMin = "0.0", ClampMax = "1.0"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera,
+		meta = (AllowPrivateAccess = "true", ClampMin = "0.0", ClampMax = "1.0"))
 	float MouseSensitivity;
 
 public:
@@ -51,7 +52,7 @@ public:
 	/* This is when calculating the trace to determine what the weapon has hit */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	float WeaponRange;
-	
+
 	/* This is multiplied by the direction vector when the weapon trace hits something to apply velocity to the component that is hit */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	float WeaponDamage;
@@ -62,8 +63,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
 	AWeapon* CurrentWeapon;
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Weapon")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	TSubclassOf<AWeapon> InitialWeapon;
+
+	UFUNCTION(BlueprintCallable)
+	UAnimInstance* GetWeaponMeshAnimInstance() const { return Mesh1P->GetAnimInstance(); }
 
 	UFUNCTION(BlueprintCallable)
 	void SetupInitialWeapon();
@@ -72,9 +76,8 @@ public:
 	virtual void AddControllerPitchInput(float Val) override;
 
 protected:
-
 	virtual void BeginPlay() override;
-	
+
 	/** Fires a virtual projectile. */
 	void OnFire();
 
@@ -114,6 +117,4 @@ public:
 	FORCEINLINE class USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
-
 };
-

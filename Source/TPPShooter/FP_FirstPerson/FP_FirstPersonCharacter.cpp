@@ -105,23 +105,6 @@ void AFP_FirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* 
 
 void AFP_FirstPersonCharacter::OnFire()
 {
-	// Play a sound if there is one
-	if (FireSound != nullptr)
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
-	}
-
-	// Try and play a firing animation if specified
-	if (FireAnimation != nullptr)
-	{
-		// Get the animation object for the arms mesh
-		UAnimInstance* AnimInstance = Mesh1P->GetAnimInstance();
-		if (AnimInstance != nullptr)
-		{
-			AnimInstance->Montage_Play(FireAnimation, 1.f);
-		}
-	}
-
 	if(CurrentWeapon != nullptr)
 	{
 		CurrentWeapon->StartFire();
