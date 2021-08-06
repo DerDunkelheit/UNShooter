@@ -30,7 +30,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetCurrentHealth() { return CurrentHealth; }
 
-	UPROPERTY(BlueprintAssignable, Category = "Inventory")
+	UPROPERTY(BlueprintAssignable, Category = "Settings")
 	FOnHealthDepleted OnHealthDepleted;
 
 protected:
