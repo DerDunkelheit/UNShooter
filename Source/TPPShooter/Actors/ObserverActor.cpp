@@ -35,25 +35,47 @@ void AObserverActor::Tick(float DeltaTime)
 
 	DrawDebugSphere(GetWorld(), GetActorLocation(), ObserverRadius, 32, FColor::Orange);
 
+	if (bInstantSpot)
+	{
+		if (CanSeePlayer())
+		{
+			PlayerVisibleTimer += DeltaTime;
+		}
+		else
+		{
+			PlayerVisibleTimer -= DeltaTime;
+		}
+
+		PlayerVisibleTimer = FMath::Clamp<float>(PlayerVisibleTimer, 0, TimerToSpotPlayer);
+		SpotLight->SetLightColor(FLinearColor::LerpUsingHSV(FColor::White, FColor::Red, PlayerVisibleTimer / TimerToSpotPlayer));
+	}
+	else
+	{
+		SpotLight->SetLightColor(CanSeePlayer() ? FColor::Red : FColor::White);
+	}
+}
+
+bool AObserverActor::CanSeePlayer()
+{
+	verifyf(Player != nullptr, TEXT("Player wasn't found"))
+
 	FVector PlayerPosition = Player->GetActorLocation();
-	FVector dirToPlayer = PlayerPosition - GetActorLocation();
-	dirToPlayer.Normalize();
+	FVector DirToPlayer = PlayerPosition - GetActorLocation();
+	DirToPlayer.Normalize();
 
 	float DistanceBetween = (PlayerPosition - GetActorLocation()).Size();
-	GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Yellow, FString::Printf(TEXT("%f"), DistanceBetween));
+	GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Yellow,FString::Printf(TEXT("Distance to Player: %f"), DistanceBetween));
 
-	if (DistanceBetween > ObserverRadius)
+	if (DistanceBetween < ObserverRadius)
 	{
-		SpotLight->SetLightColor(FColor::White);
-		return;
+		float AngleBetween = FMath::RadiansToDegrees(
+			FMath::Acos(FVector::DotProduct(GetActorForwardVector(), DirToPlayer)));
+		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Cyan, FString::Printf(TEXT("%f"), AngleBetween));
+
+		return AngleBetween < ObserverAngle / 2 ? true : false;
 	}
 
-	float AngleBetween = FMath::RadiansToDegrees(FMath::Acos(FVector::DotProduct(GetActorForwardVector(), dirToPlayer)));
-	GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Cyan, FString::Printf(TEXT("%f"), AngleBetween));
-
-	const FColor SpotLightColor = AngleBetween < ObserverAngle / 2 ? FColor::Red : FColor::White;
-
-	SpotLight->SetLightColor(SpotLightColor);
+	return false;
 }
 
 void AObserverActor::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)

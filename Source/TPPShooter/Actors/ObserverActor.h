@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 
-#include "Components/SphereComponent.h"
 #include "Components/SpotLightComponent.h"
 #include "GameFramework/Actor.h"
 #include "TPPShooter/FP_FirstPerson/FP_FirstPersonCharacter.h"
@@ -27,11 +26,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
 	USpotLightComponent* SpotLight;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
 	float ObserverRadius = 100;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
 	float ObserverAngle = 120;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
+	bool bInstantSpot = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings", meta = (EditCondition = "bInstantSpot"))
+	float TimerToSpotPlayer = 1;
 
 protected:
 	// Called when the game starts or when spawned
@@ -44,4 +48,8 @@ public:
 
 private:
 	AFP_FirstPersonCharacter* Player = nullptr;
+	float PlayerVisibleTimer;
+
+private:
+	bool CanSeePlayer();
 };
