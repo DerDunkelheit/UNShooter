@@ -37,15 +37,7 @@ void AObserverActor::Tick(float DeltaTime)
 
 	if (bInstantSpot)
 	{
-		if (CanSeePlayer())
-		{
-			PlayerVisibleTimer += DeltaTime;
-		}
-		else
-		{
-			PlayerVisibleTimer -= DeltaTime;
-		}
-
+		CanSeePlayer() ? PlayerVisibleTimer += DeltaTime : PlayerVisibleTimer -= DeltaTime;
 		PlayerVisibleTimer = FMath::Clamp<float>(PlayerVisibleTimer, 0, TimerToSpotPlayer);
 		SpotLight->SetLightColor(FLinearColor::LerpUsingHSV(FColor::White, FColor::Red, PlayerVisibleTimer / TimerToSpotPlayer));
 	}
