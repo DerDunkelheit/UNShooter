@@ -37,13 +37,13 @@ void AObserverActor::Tick(float DeltaTime)
 
 	if (bInstantSpot)
 	{
-		CanSeePlayer() ? PlayerVisibleTimer += DeltaTime : PlayerVisibleTimer -= DeltaTime;
-		PlayerVisibleTimer = FMath::Clamp<float>(PlayerVisibleTimer, 0, TimerToSpotPlayer);
-		SpotLight->SetLightColor(FLinearColor::LerpUsingHSV(FColor::White, FColor::Red, PlayerVisibleTimer / TimerToSpotPlayer));
+		SpotLight->SetLightColor(CanSeePlayer() ? FColor::Red : FColor::White);
 	}
 	else
 	{
-		SpotLight->SetLightColor(CanSeePlayer() ? FColor::Red : FColor::White);
+		CanSeePlayer() ? PlayerVisibleTimer += DeltaTime : PlayerVisibleTimer -= DeltaTime;
+		PlayerVisibleTimer = FMath::Clamp<float>(PlayerVisibleTimer, 0, TimerToSpotPlayer);
+		SpotLight->SetLightColor(FLinearColor::LerpUsingHSV(FColor::White, FColor::Red, PlayerVisibleTimer / TimerToSpotPlayer));
 	}
 }
 
@@ -56,7 +56,7 @@ bool AObserverActor::CanSeePlayer()
 	DirToPlayer.Normalize();
 
 	float DistanceBetween = (PlayerPosition - GetActorLocation()).Size();
-	GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Yellow,FString::Printf(TEXT("Distance to Player: %f"), DistanceBetween));
+	GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Yellow, FString::Printf(TEXT("Distance to Player: %f"), DistanceBetween));
 
 	if (DistanceBetween < ObserverRadius)
 	{
