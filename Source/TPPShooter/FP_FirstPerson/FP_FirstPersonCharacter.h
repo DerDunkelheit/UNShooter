@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "Components/HealthComponent.h"
+#include "Components/InteractionComponent.h"
 #include "GameFramework/Character.h"
 #include "TPPShooter/Weapons/Weapon.h"
 
@@ -113,6 +114,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	class UHealthComponent* HealthComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
+	UInteractionComponent* InteractionComponent;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void DieEvent();

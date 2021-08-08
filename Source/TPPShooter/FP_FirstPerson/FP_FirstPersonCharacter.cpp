@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/InteractionComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "TPPShooter/NonUClasses/GameDebuggerNew.h"
 
@@ -45,6 +46,7 @@ AFP_FirstPersonCharacter::AFP_FirstPersonCharacter()
 	// derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("InteractionComponent"));
 
 	CharacterWeaponSocket = "WeaponSocket";
 }
@@ -92,6 +94,8 @@ void AFP_FirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	// Bind fire event
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AFP_FirstPersonCharacter::OnFire);
 	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &AFP_FirstPersonCharacter::EndFire);
+
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, InteractionComponent, &UInteractionComponent::TryInteract);
 
 	// Bind movement events
 	PlayerInputComponent->BindAxis("MoveForward", this, &AFP_FirstPersonCharacter::MoveForward);
