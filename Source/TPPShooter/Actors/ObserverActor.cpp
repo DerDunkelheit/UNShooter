@@ -33,7 +33,7 @@ void AObserverActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	DrawDebugSphere(GetWorld(), GetActorLocation(), ObserverRadius, 32, FColor::Orange);
+	if(bDebugMode) DrawDebugSphere(GetWorld(), GetActorLocation(), ObserverRadius, 32, FColor::Orange);
 
 	if (bInstantSpot)
 	{
@@ -43,7 +43,8 @@ void AObserverActor::Tick(float DeltaTime)
 	{
 		CanSeePlayer() ? PlayerVisibleTimer += DeltaTime : PlayerVisibleTimer -= DeltaTime;
 		PlayerVisibleTimer = FMath::Clamp<float>(PlayerVisibleTimer, 0, TimerToSpotPlayer);
-		SpotLight->SetLightColor(FLinearColor::LerpUsingHSV(FColor::White, FColor::Red, PlayerVisibleTimer / TimerToSpotPlayer));
+		SpotLight->SetLightColor(
+			FLinearColor::LerpUsingHSV(FColor::White, FColor::Red, PlayerVisibleTimer / TimerToSpotPlayer));
 	}
 }
 
@@ -56,13 +57,15 @@ bool AObserverActor::CanSeePlayer()
 	DirToPlayer.Normalize();
 
 	float DistanceBetween = (PlayerPosition - GetActorLocation()).Size();
-	GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Yellow, FString::Printf(TEXT("Distance to Player: %f"), DistanceBetween));
 
+	if (bDebugMode) GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Yellow,FString::Printf(TEXT("Distance to Player: %f"), DistanceBetween));
+	
 	if (DistanceBetween < ObserverRadius)
 	{
 		float AngleBetween = FMath::RadiansToDegrees(
 			FMath::Acos(FVector::DotProduct(GetActorForwardVector(), DirToPlayer)));
-		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Cyan, FString::Printf(TEXT("%f"), AngleBetween));
+
+		if (bDebugMode) GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Cyan,FString::Printf(TEXT("Angle between: %f"), AngleBetween));
 
 		return AngleBetween < ObserverAngle / 2 ? true : false;
 	}

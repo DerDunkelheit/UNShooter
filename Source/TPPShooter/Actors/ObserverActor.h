@@ -33,6 +33,9 @@ protected:
 	float ObserverAngle = 120;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
+	bool bDebugMode = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
 	bool bInstantSpot = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings", meta = (EditCondition = "!bInstantSpot"))
 	float TimerToSpotPlayer = 1;
