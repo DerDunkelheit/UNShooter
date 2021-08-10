@@ -29,8 +29,8 @@ void AEnemyRoomActor::BeginPlay()
 
 	//Example
 	
-	RoomActor->TestDelegate.AddUFunction(this,NAMEOF(ExampleEventFunction));
-	RoomActor->TestEvent.AddUFunction(this,NAMEOF(ExampleEventFunction));
+	//RoomActor->TestDelegate.AddUFunction(this,NAMEOF(ExampleEventFunction));
+	//RoomActor->TestEvent.AddUFunction(this,NAMEOF(ExampleEventFunction));
 }
 
 // Called every frame
@@ -53,7 +53,7 @@ void AEnemyRoomActor::CloseDoor()
 	SetActorEnableCollision(true);
 
 	//this->AddInstanceComponent(NewObject<UHealthComponent>());
-	FillArrayWithRandom(RoomActor->testArray);
+	//FillArrayWithRandom(RoomActor->testArray);
 }
 
 //Example

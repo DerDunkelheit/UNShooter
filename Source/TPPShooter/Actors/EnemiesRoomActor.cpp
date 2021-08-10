@@ -10,6 +10,7 @@ AEnemiesRoomActor::AEnemiesRoomActor()
 	PrimaryActorTick.bCanEverTick = true;
 
 	RoomEnterTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Room enter trigger"));
+	EnemiesSpawnerComponent = CreateDefaultSubobject<UEnemiesSpawnerComponent>(TEXT("Enemies Spawner"));
 }
 
 // Called when the game starts or when spawned
@@ -27,25 +28,17 @@ void AEnemiesRoomActor::Tick(float DeltaTime)
 }
 
 void AEnemiesRoomActor::OnEnterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                       UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	GEngine->AddOnScreenDebugMessage(-1,4,FColor::Orange,"Player entered the room");
 	PlayerEnteredEvent.Broadcast();
-	TestDelegate.Broadcast();
-	TestEvent.Broadcast();
+
+	DisableTrigger();
 }
 
-//Example
-
-void AEnemiesRoomActor::PrintArrayValues()
+void AEnemiesRoomActor::DisableTrigger()
 {
-    if(testArray.Num() == 0)
-    {
-    	GEngine->AddOnScreenDebugMessage(-1,3,FColor::Red,TEXT("Empty array"));
-    }
-	
-	for (int value : testArray)
-	{
-		GEngine->AddOnScreenDebugMessage(-1,3,FColor::Green,FString::FromInt(value));
-	}
+	RoomEnterTrigger->SetActive(false);
+	RoomEnterTrigger->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	RoomEnterTrigger->SetComponentTickEnabled(false);
 }

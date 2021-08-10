@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "Components/BoxComponent.h"
+#include "Components/EnemiesSpawnerComponent.h"
 #include "GameFramework/Actor.h"
 #include "EnemiesRoomActor.generated.h"
 
@@ -34,13 +35,13 @@ public:
 	//Example
 	FTestDelegate TestDelegate;
     FTestEvent TestEvent;
-	//
-
-	TArray<int> testArray;
 protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
 	UBoxComponent* RoomEnterTrigger;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
+	UEnemiesSpawnerComponent* EnemiesSpawnerComponent;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -49,10 +50,10 @@ protected:
 	UFUNCTION()
 	void OnEnterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
-	UFUNCTION(BlueprintCallable)
-	void PrintArrayValues();
-
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	void DisableTrigger();
 };
