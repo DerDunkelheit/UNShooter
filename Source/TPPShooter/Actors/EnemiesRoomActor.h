@@ -11,6 +11,7 @@
 
 //Blueprints will bind to this to update the UI.
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerEnteredRoom);
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRoomCleared);
 
 //Delegates and Event example
@@ -34,26 +35,33 @@ public:
 
 	//Example
 	FTestDelegate TestDelegate;
-    FTestEvent TestEvent;
-protected:
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
-	UBoxComponent* RoomEnterTrigger;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
-	UEnemiesSpawnerComponent* EnemiesSpawnerComponent;
-	
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	UFUNCTION()
-	void OnEnterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+	FTestEvent TestEvent;
 
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void IncreaseEnemiesNumber();
+	void DecreaseEnemiesNumber();
+	
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
+	UBoxComponent* RoomEnterTrigger;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
+	UEnemiesSpawnerComponent* EnemiesSpawnerComponent;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void OnEnterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	                    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+private:
+	int EnemiesNumber = 0;
+	
 private:
 	void DisableTrigger();
 };

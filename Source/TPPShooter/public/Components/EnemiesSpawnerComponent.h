@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "EnemiesSpawnerComponent.generated.h"
 
+class AEnemiesRoomActor;
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class TPPSHOOTER_API UEnemiesSpawnerComponent : public UActorComponent
 {
@@ -32,6 +34,14 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
+	AEnemiesRoomActor* Owner = nullptr;
+	
+private:
 	UFUNCTION()
 	void SpawnEnemy();
+
+	UFUNCTION()
+	void OnEnemyDied();
+
+	void AddHealthComponentToEnemy(AActor* Enemy);
 };

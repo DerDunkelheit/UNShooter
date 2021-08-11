@@ -27,6 +27,21 @@ void AEnemiesRoomActor::Tick(float DeltaTime)
 
 }
 
+void AEnemiesRoomActor::IncreaseEnemiesNumber()
+{
+	EnemiesNumber++;
+}
+
+void AEnemiesRoomActor::DecreaseEnemiesNumber()
+{
+	EnemiesNumber--;
+
+	if(EnemiesNumber <= 0)
+	{
+		RoomClearedEvent.Broadcast();
+	}
+}
+
 void AEnemiesRoomActor::OnEnterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                                        UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {

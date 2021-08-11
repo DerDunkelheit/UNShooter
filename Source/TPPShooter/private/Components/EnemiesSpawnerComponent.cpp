@@ -3,6 +3,7 @@
 
 #include "Components/EnemiesSpawnerComponent.h"
 
+#include "Components/HealthComponent.h"
 #include "TPPShooter/Actors/EnemiesRoomActor.h"
 
 // Sets default values for this component's properties
@@ -20,8 +21,9 @@ UEnemiesSpawnerComponent::UEnemiesSpawnerComponent()
 void UEnemiesSpawnerComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	Cast<AEnemiesRoomActor>(GetOwner())->PlayerEnteredEvent.AddDynamic(this, &UEnemiesSpawnerComponent::SpawnEnemy);
+
+	Owner = Cast<AEnemiesRoomActor>(GetOwner());
+	Owner->PlayerEnteredEvent.AddDynamic(this, &UEnemiesSpawnerComponent::SpawnEnemy);
 }
 
 
@@ -39,9 +41,18 @@ void UEnemiesSpawnerComponent::SpawnEnemy()
 	auto RandomPosition = SpawnPoints[FMath::RandRange(0, SpawnPoints.Num() - 1)]->GetActorLocation();
 	
 	auto Enemy = GetWorld()->SpawnActor<AActor>(RandomSpawningClass ,RandomPosition,FRotator::ZeroRotator);
-	
-	//Spawn enemy at random position.
-	//Add health component.
-	//Subscribe to health depleted event in order to open the door.
+	Owner->IncreaseEnemiesNumber();
+	AddHealthComponentToEnemy(Enemy);
 }
 
+void UEnemiesSpawnerComponent::AddHealthComponentToEnemy(AActor* Enemy)
+{
+	UHealthComponent* HealthComponent = NewObject<UHealthComponent>(Enemy);
+	HealthComponent->RegisterComponent();
+	HealthComponent->OnHealthDepleted.AddDynamic(this, &UEnemiesSpawnerComponent::OnEnemyDied);
+}
+
+void UEnemiesSpawnerComponent::OnEnemyDied()
+{
+	Owner->DecreaseEnemiesNumber();
+}
