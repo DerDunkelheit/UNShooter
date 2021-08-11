@@ -30,6 +30,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetCurrentHealth() { return CurrentHealth; }
 
+	UFUNCTION(BlueprintCallable)
+	void BindDefaultOnHealthDepletedLogic();
+
 	UPROPERTY(BlueprintAssignable, Category = "Settings")
 	FOnHealthDepleted OnHealthDepleted;
 
@@ -51,4 +54,7 @@ private:
 	float DamageMultiply;
 
 	void TriggerDie() {OnHealthDepleted.Broadcast();};
+
+	UFUNCTION()
+	void SelfDestroy();
 };

@@ -50,6 +50,7 @@ void UEnemiesSpawnerComponent::AddHealthComponentToEnemy(AActor* Enemy)
 	UHealthComponent* HealthComponent = NewObject<UHealthComponent>(Enemy);
 	HealthComponent->RegisterComponent();
 	HealthComponent->OnHealthDepleted.AddDynamic(this, &UEnemiesSpawnerComponent::OnEnemyDied);
+	HealthComponent->BindDefaultOnHealthDepletedLogic();
 }
 
 void UEnemiesSpawnerComponent::OnEnemyDied()

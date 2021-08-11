@@ -38,6 +38,17 @@ void UHealthComponent::RestoreHealth(float Value)
 	}
 }
 
+//TODO: create a destructive component for that.
+void UHealthComponent::BindDefaultOnHealthDepletedLogic()
+{
+	OnHealthDepleted.AddDynamic(this, &UHealthComponent::SelfDestroy);
+}
+
+void UHealthComponent::SelfDestroy()
+{
+	GetOwner()->Destroy();
+}
+
 void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
                                   AController* InstigatedBy, AActor* DamageCauser)
 {
