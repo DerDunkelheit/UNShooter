@@ -28,7 +28,8 @@ void UEnemiesSpawnerComponent::BeginPlay()
 
 
 // Called every frame
-void UEnemiesSpawnerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UEnemiesSpawnerComponent::TickComponent(float DeltaTime, ELevelTick TickType,
+                                             FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
@@ -37,12 +38,21 @@ void UEnemiesSpawnerComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 void UEnemiesSpawnerComponent::SpawnEnemy()
 {
-	auto RandomSpawningClass = PossibleEnemies[FMath::RandRange(0,PossibleEnemies.Num() - 1)];
-	auto RandomPosition = SpawnPoints[FMath::RandRange(0, SpawnPoints.Num() - 1)]->GetActorLocation();
-	
-	auto Enemy = GetWorld()->SpawnActor<AActor>(RandomSpawningClass ,RandomPosition,FRotator::ZeroRotator);
+	auto RandomSpawningClass = PossibleEnemies[FMath::RandRange(0, PossibleEnemies.Num() - 1)];
+	auto SpawnPoint = SpawnPoints[FMath::RandRange(0, SpawnPoints.Num() - 1)];
+
+	auto Enemy = GetWorld()->SpawnActor<AActor>(RandomSpawningClass, SpawnPoint->GetActorLocation(),SpawnPoint->GetActorRotation());
 	Owner->IncreaseEnemiesNumber();
-	AddHealthComponentToEnemy(Enemy);
+	UHealthComponent* HealthComponent = Enemy->FindComponentByClass<UHealthComponent>();
+
+	if (HealthComponent == nullptr)
+	{
+		AddHealthComponentToEnemy(Enemy);
+	}
+	else
+	{
+		HealthComponent->OnHealthDepleted.AddDynamic(this, &UEnemiesSpawnerComponent::OnEnemyDied);
+	}
 }
 
 void UEnemiesSpawnerComponent::AddHealthComponentToEnemy(AActor* Enemy)
