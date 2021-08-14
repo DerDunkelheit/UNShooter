@@ -14,6 +14,7 @@ APowerUpActor::APowerUpActor()
 
 	InteractZone = CreateDefaultSubobject<UBoxComponent>(TEXT("InteractZone"));
 	VisualEffectActor = CreateDefaultSubobject<UChildActorComponent>(TEXT("VisualEffectActor"));
+	VisualEffectActor->ResetRelativeTransform();
 }
 
 // Called when the game starts or when spawned
