@@ -78,52 +78,28 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void IncreaseTemporarySpeed(float AdditionalSpeedValue, float Duration);
 
+	FORCEINLINE class USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
+	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+
 	virtual void AddControllerYawInput(float Val) override;
 	virtual void AddControllerPitchInput(float Val) override;
 
 protected:
-	virtual void BeginPlay() override;
-
-	/** Fires a virtual projectile. */
-	void OnFire();
-
-	void EndFire();
-	USkeletalMeshComponent* GetWeaponMesh() const { return Mesh1P; }
-
-	/** Handles moving forward/backward */
-	void MoveForward(float Val);
-
-	/** Handles strafing movement, left and right */
-	void MoveRight(float Val);
-
-	/* 
-	 * Performs a trace between two points
-	 * 
-	 * @param	StartTrace	Trace starting point
-	 * @param	EndTrac		Trace end point
-	 * @returns FHitResult returns a struct containing trace result - who/what the trace hit etc.
-	 */
-	FHitResult WeaponTrace(const FVector& StartTrace, const FVector& EndTrace) const;
-
-	// APawn interface
-	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
-
-	//TODO: replace to weapon.
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-	TSubclassOf<UDamageType> DamageType;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	class UHealthComponent* HealthComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	UInteractionComponent* InteractionComponent;
 
+protected:
+	virtual void BeginPlay() override;
+	void OnFire();
+	void EndFire();
+	USkeletalMeshComponent* GetWeaponMesh() const { return Mesh1P; }
+	void MoveForward(float Val);
+	void MoveRight(float Val);
+	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void DieEvent();
-
-public:
-	/** Returns Mesh1P subobject **/
-	FORCEINLINE class USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
-	/** Returns FirstPersonCameraComponent subobject **/
-	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 };
