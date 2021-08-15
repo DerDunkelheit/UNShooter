@@ -113,31 +113,6 @@ void AFP_FirstPersonCharacter::OnFire()
 	{
 		CurrentWeapon->StartFire();
 	}
-
-	//TODO: replace to weapon class.
-	FVector EyeLocation;
-	FRotator EyeRotation;
-	GetActorEyesViewPoint(EyeLocation, EyeRotation);
-
-	FVector ShotDirection = EyeRotation.Vector();
-	FVector TraceEnd = EyeLocation + (ShotDirection * 10000);
-
-	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(this);
-	QueryParams.bTraceComplex = true;
-
-	FHitResult Hit;
-	if (GetWorld()->LineTraceSingleByChannel(Hit, EyeLocation, TraceEnd, ECC_Visibility, QueryParams))
-	{
-		AActor* HitActor = Hit.GetActor();
-		UGameplayStatics::ApplyPointDamage(HitActor, 20, ShotDirection, Hit, GetInstigatorController(),
-										this, DamageType);
-	}
-
-	if (GameDebuggerNew::IsDebugWeaponEnable())
-	{
-		DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::White, false, 1, 0, 1);
-	}
 }
 
 void AFP_FirstPersonCharacter::EndFire()

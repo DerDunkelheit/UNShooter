@@ -6,6 +6,4 @@
 void AFPWeapon::Fire()
 {
 	Super::Fire();
-
-	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Red,"Override");
 }
