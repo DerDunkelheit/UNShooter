@@ -20,27 +20,22 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category = "Settings")
 	AEnemiesRoomActor* RoomActor;
-
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
-	UStaticMeshComponent* DoorMesh;
+	USkeletalMeshComponent* SkeletalDoorMesh;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void CloseDoor();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnRoomCleared();
 
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	void FillArrayWithRandom(TArray<int>& Array);
-
-private:
-	UFUNCTION()
-	void CloseDoor();
-
-	//Example
-	
-	UFUNCTION()
-	void ExampleEventFunction();
-
-	void RawExampleFunction();
 };

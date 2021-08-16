@@ -12,8 +12,8 @@ AEnemyRoomActor::AEnemyRoomActor()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	DoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door Mesh"));
-	SetRootComponent(DoorMesh);
+	SkeletalDoorMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Skeletal Door Mesh"));
+	SetRootComponent(SkeletalDoorMesh);
 }
 
 // Called when the game starts or when spawned
@@ -22,10 +22,8 @@ void AEnemyRoomActor::BeginPlay()
 	Super::BeginPlay();
 
 	verify(RoomActor != nullptr);
-
-	SetActorEnableCollision(false);
-
 	RoomActor->PlayerEnteredEvent.AddDynamic(this, &AEnemyRoomActor::CloseDoor);
+	RoomActor->RoomClearedEvent.AddDynamic(this, &AEnemyRoomActor::OnRoomCleared);
 
 	//Example
 	
@@ -45,25 +43,4 @@ void AEnemyRoomActor::FillArrayWithRandom(TArray<int>& Array)
 	{
 		Array.Add(FMath::RandRange(0, 100));
 	}
-}
-
-void AEnemyRoomActor::CloseDoor()
-{
-	SetActorHiddenInGame(false);
-	SetActorEnableCollision(true);
-
-	//this->AddInstanceComponent(NewObject<UHealthComponent>());
-	//FillArrayWithRandom(RoomActor->testArray);
-}
-
-//Example
-
-void AEnemyRoomActor::ExampleEventFunction()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Green, "From test function");
-}
-
-void AEnemyRoomActor::RawExampleFunction()
-{
-	GEngine->AddOnScreenDebugMessage(-1,2,FColor::Cyan, TEXT("From raw function"));
 }
