@@ -15,7 +15,7 @@ AChainExecutorActor::AChainExecutorActor()
 void AChainExecutorActor::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	bEnable = bEnableFromStart;
 	SwitchStateEvent.Broadcast(bEnable);
 }

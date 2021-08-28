@@ -23,8 +23,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* RotationMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Settings")
 	bool bEnableMode;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Materials")
+	UMaterialInterface* DefaultMaterial;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Materials")
+	UMaterialInterface* EmissionsFreeMaterial;
 
 protected:
 	// Called when the game starts or when spawned
