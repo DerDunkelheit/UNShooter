@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "ChainListenerActor.generated.h"
 
+//TODO: we can create a chainListenerComponent, to avoid inheritance in some cases.
 UCLASS()
 class TPPSHOOTER_API AChainListenerActor : public AActor
 {

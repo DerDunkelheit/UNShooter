@@ -23,7 +23,11 @@ public:
 	AChainExecutorActor();
 
 	virtual void Interact_Implementation() override;
-	
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
+	bool bEnableFromStart;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -31,7 +35,7 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
+
 private:
 	bool bEnable;
 };
