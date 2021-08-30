@@ -7,6 +7,8 @@ UCustomGameInstance::UCustomGameInstance()
 {
 }
 
+//TODO: Create template for that.
+
 UCraftingManager* UCustomGameInstance::CraftingManager()
 {
 	return
@@ -21,4 +23,12 @@ UDialoguesManager* UCustomGameInstance::DialoguesManager()
 		IsValid(DialoguesManagerInstance)
 			? DialoguesManagerInstance
 			: DialoguesManagerInstance = NewObject<UDialoguesManager>(this, FName("DialoguesManager"));
+}
+
+UPersistenceManager* UCustomGameInstance::PersistenceManager()
+{
+	return
+		IsValid(PersistenceManagerInstance)
+			? PersistenceManagerInstance
+			: PersistenceManagerInstance = NewObject<UPersistenceManager>(this, FName("PersistenceManager"));
 }

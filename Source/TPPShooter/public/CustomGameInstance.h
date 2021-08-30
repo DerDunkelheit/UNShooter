@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "TPPShooter/DialoguesSystem/DialoguesManager.h"
 #include "TPPShooter/MinecraftCrfatingSystem/CraftingManager.h"
+#include "TPPShooter/Systems/PersistenceManager.h"
 
 #include "CustomGameInstance.generated.h"
 
@@ -28,6 +29,9 @@ public:
 
     UFUNCTION(BlueprintPure, Category = "Persistence")
 	UDialoguesManager* DialoguesManager();
+
+	UFUNCTION(BlueprintPure, Category = "Persistence")
+	UPersistenceManager* PersistenceManager();
 	
 private:
 	UPROPERTY(Transient)
@@ -35,4 +39,7 @@ private:
 
 	UPROPERTY(Transient)
 	UDialoguesManager* DialoguesManagerInstance;
+
+	UPROPERTY(Transient)
+	UPersistenceManager* PersistenceManagerInstance;
 };
