@@ -2,16 +2,40 @@
 
 #include "TPPShooter/Systems/PersistenceManager.h"
 #include "MainSaveGame.h"
+#include "JsonObjectConverter.h"
 #include "Kismet/GameplayStatics.h"
 
-void UPersistenceManager::Test()
+void UPersistenceManager::SaveToJsonExample()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Green, "Teeeest");
+    JsonDataExampleStruct.ExampleStringField = "Something was written";
+	
+	FString JsonString;
+	FJsonObjectConverter::UStructToJsonObjectString(JsonDataExampleStruct, JsonString);
+	FFileHelper::SaveStringToFile(*JsonString, *(FPaths::ProjectSavedDir() + TEXT("/JsonFiles/Test.json")));
+
+	//Full platform specific path.
+	FPaths::ConvertRelativePathToFull(FPaths::ProjectSavedDir());
+}
+
+FJsonDataExampleStruct UPersistenceManager::LoadJsonExample()
+{
+    FString JsonString;
+	FFileHelper::LoadFileToString(JsonString, *(FPaths::ProjectSavedDir() + TEXT("/JsonFiles/Test.json")));
+	TSharedRef<TJsonReader<TCHAR>> JsonReader = TJsonReaderFactory<TCHAR>::Create(JsonString);
+	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
+	FJsonDataExampleStruct DataExampleStruct;
+
+	if(FJsonSerializer::Deserialize(JsonReader, JsonObject) && JsonObject.IsValid())
+	{
+		BuildDataExampleStruct(JsonObject, DataExampleStruct);
+	}
+
+	return DataExampleStruct;
 }
 
 void UPersistenceManager::WriteSaveGame(UMainSaveGame* SaveGame)
 {
-	if(SaveGame != nullptr)
+	if (SaveGame != nullptr)
 	{
 		// Save the data immediately.
 		if (UGameplayStatics::SaveGameToSlot(SaveGame, "TestSaveSlot", 0))
@@ -53,4 +77,10 @@ UMainSaveGame* UPersistenceManager::CreateInitialSaveGame()
 	}
 
 	return SaveGame;
+}
+
+void UPersistenceManager::BuildDataExampleStruct(TSharedPtr<FJsonObject> JsonObject, FJsonDataExampleStruct& DataExampleStruct)
+{
+	auto exampleString = JsonObject->GetStringField("ExampleStringField");
+	DataExampleStruct.ExampleStringField = exampleString;
 }
