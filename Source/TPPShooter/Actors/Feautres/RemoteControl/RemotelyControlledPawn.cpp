@@ -3,6 +3,10 @@
 
 #include "TPPShooter/Actors/Feautres/RemoteControl/RemotelyControlledPawn.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "TPPShooter/FP_FirstPerson/FP_FirstPersonCharacter.h"
+#include "TPPShooter/FP_FirstPerson/FP_PlayerController.h"
+
 // Sets default values
 ARemotelyControlledPawn::ARemotelyControlledPawn()
 {
@@ -22,6 +26,14 @@ ARemotelyControlledPawn::ARemotelyControlledPawn()
 void ARemotelyControlledPawn::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	AFP_PlayerController* PlayerController = Cast<AFP_PlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	PlayerController->PossessEvent.AddDynamic(this, &ARemotelyControlledPawn::OnTurretPossessed);
+	PlayerController->UnPossessEvent.AddDynamic(this, &ARemotelyControlledPawn::OnTurretUnPossessed);
+
+	auto* CameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+	InitialYawMin = CameraManager->ViewYawMin;
+	InitialYawMax = CameraManager->ViewYawMax;
 }
 
 // Called every frame
@@ -37,6 +49,8 @@ void ARemotelyControlledPawn::SetupPlayerInputComponent(UInputComponent* PlayerI
 
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+
+	PlayerInputComponent->BindAction("StopPossession", IE_Pressed, this, &ARemotelyControlledPawn::StopPossession);
 }
 
 void ARemotelyControlledPawn::AddControllerYawInput(float Value)
@@ -54,4 +68,22 @@ void ARemotelyControlledPawn::PostEditChangeProperty(FPropertyChangedEvent& Prop
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 
 	SceneCaptureComponent->SetWorldTransform(CameraComponent->GetComponentTransform());
+}
+
+void ARemotelyControlledPawn::SetPreviousPawn(APawn* PreviousPawn)
+{
+	PreviousPossessedPawn = PreviousPawn;
+}
+
+void ARemotelyControlledPawn::StopPossession()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Stop possesing"));
+
+    auto* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	LastPawnRotator = PlayerController->GetControlRotation();
+	PlayerController->Possess(PreviousPossessedPawn);
+	
+	auto* CameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+	CameraManager->ViewYawMin = InitialYawMin;
+	CameraManager->ViewYawMax = InitialYawMax;
 }

@@ -3,11 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "RemotelyControlledPawn.h"
 #include "GameFramework/Actor.h"
+#include "TPPShooter/Interfaces/Interactable.h"
 #include "RemoteControllerActor.generated.h"
 
 UCLASS()
-class TPPSHOOTER_API ARemoteControllerActor : public AActor
+class TPPSHOOTER_API ARemoteControllerActor : public AActor, public IInteractable
 {
 	GENERATED_BODY()
 	
@@ -18,6 +20,9 @@ public:
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
 	UStaticMeshComponent* MeshComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings")
+	ARemotelyControlledPawn* ControlledPawn;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -26,5 +31,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	virtual void Interact_Implementation() override;
 
 };

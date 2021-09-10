@@ -26,13 +26,27 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
 	USceneCaptureComponent2D* SceneCaptureComponent;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings")
+	APawn* PreviousPossessedPawn;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
+	FRotator LastPawnRotator;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnTurretPossessed(APawn* NewPawn);
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnTurretUnPossessed();
+
 public:
+	UFUNCTION(BlueprintCallable)
+	void SetPreviousPawn(APawn* PreviousPawn);
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void AddControllerYawInput(float Value) override;
@@ -40,4 +54,11 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+private:
+	float InitialYawMin;
+	float InitialYawMax;
+	
+private:
+	void StopPossession();
 };

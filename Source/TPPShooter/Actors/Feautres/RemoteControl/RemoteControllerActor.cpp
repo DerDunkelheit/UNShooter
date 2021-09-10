@@ -27,3 +27,6 @@ void ARemoteControllerActor::Tick(float DeltaTime)
 
 }
 
+void ARemoteControllerActor::Interact_Implementation()
+{ }
+
