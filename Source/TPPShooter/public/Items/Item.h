@@ -54,7 +54,7 @@ public:
 	int Quantity;
 	
 	UPROPERTY()
-	class UInventoryComponent* OwningInventory;
+	UInventoryComponent* OwningInventory;
 
 	virtual class UWorld* GetWorld() const { return World; }
 	virtual void Use(ATPPShooterCharacter* Character);

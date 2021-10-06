@@ -22,7 +22,14 @@ protected:
 	UStaticMeshComponent* MeshComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings")
+	bool bSingleControl;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings", meta = (EditCondition = "bSingleControl"))
 	ARemotelyControlledPawn* ControlledPawn;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings", meta = (EditCondition = "!bSingleControl"))
+	TArray<ARemotelyControlledPawn*> ControlledPawns;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
+	ARemotelyControlledPawn* LastControlledPawn;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -31,6 +38,12 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable)
+	void SetLastControlledPawn(ARemotelyControlledPawn* LastPawn);
+
+	UFUNCTION(BlueprintCallable)
+	ARemotelyControlledPawn* GetControlledPawnByIndex(int Index);
 
 	virtual void Interact_Implementation() override;
 

@@ -16,11 +16,7 @@ class TPPSHOOTER_API ARemotelyControlledPawn : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ARemotelyControlledPawn();
-
-protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
-	USkeletalMeshComponent* SkeletalMeshComponent;
-
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
 	UCameraComponent* CameraComponent;
 
@@ -33,19 +29,25 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
 	FRotator LastPawnRotator;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings")
+	UTextureRenderTarget2D* CameraRenderTarget;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnTurretPossessed(APawn* NewPawn);
+	void OnPawnPossessed(APawn* NewPawn);
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnTurretUnPossessed();
+	void OnPawnUnPossessed();
 
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetPreviousPawn(APawn* PreviousPawn);
+
+	UFUNCTION(BlueprintCallable)
+	void ClearRenderTarget();
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

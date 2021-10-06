@@ -12,14 +12,12 @@ ARemotelyControlledPawn::ARemotelyControlledPawn()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
-	SetRootComponent(SkeletalMeshComponent);
+	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	CameraComponent->SetupAttachment(SkeletalMeshComponent);
+	CameraComponent->SetupAttachment(GetRootComponent());
 	CameraComponent->bUsePawnControlRotation = true;
 	SceneCaptureComponent = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("SceneCapture"));
-	SceneCaptureComponent->SetupAttachment(SkeletalMeshComponent);
+	SceneCaptureComponent->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
@@ -28,8 +26,8 @@ void ARemotelyControlledPawn::BeginPlay()
 	Super::BeginPlay();
 	
 	AFP_PlayerController* PlayerController = Cast<AFP_PlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	PlayerController->PossessEvent.AddDynamic(this, &ARemotelyControlledPawn::OnTurretPossessed);
-	PlayerController->UnPossessEvent.AddDynamic(this, &ARemotelyControlledPawn::OnTurretUnPossessed);
+	PlayerController->PossessEvent.AddDynamic(this, &ARemotelyControlledPawn::OnPawnPossessed);
+	PlayerController->UnPossessEvent.AddDynamic(this, &ARemotelyControlledPawn::OnPawnUnPossessed);
 
 	auto* CameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
 	InitialYawMin = CameraManager->ViewYawMin;
@@ -60,7 +58,7 @@ void ARemotelyControlledPawn::AddControllerYawInput(float Value)
 
 void ARemotelyControlledPawn::AddControllerPitchInput(float Value)
 {
-	Super::AddControllerPitchInput(Value);
+	//Super::AddControllerPitchInput(Value);
 }
 
 void ARemotelyControlledPawn::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
@@ -73,6 +71,11 @@ void ARemotelyControlledPawn::PostEditChangeProperty(FPropertyChangedEvent& Prop
 void ARemotelyControlledPawn::SetPreviousPawn(APawn* PreviousPawn)
 {
 	PreviousPossessedPawn = PreviousPawn;
+}
+
+void ARemotelyControlledPawn::ClearRenderTarget()
+{
+	SceneCaptureComponent->TextureTarget = nullptr;
 }
 
 void ARemotelyControlledPawn::StopPossession()

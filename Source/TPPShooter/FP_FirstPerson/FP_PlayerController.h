@@ -11,7 +11,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FUnPossessEvent);
 
 UCLASS()
 class TPPSHOOTER_API AFP_PlayerController : public APlayerController
-{
+{ 
 	GENERATED_BODY()
 
 public:
