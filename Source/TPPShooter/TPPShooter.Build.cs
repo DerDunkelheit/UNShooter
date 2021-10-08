@@ -20,5 +20,10 @@ public class TPPShooter : ModuleRules
 			"Json",
 			"JsonUtilities",
 		});
+		
+		PublicIncludePaths.AddRange(new []
+		{
+			"TPPShooter"
+		});
 	}
 }
