@@ -32,3 +32,11 @@ UPersistenceManager* UCustomGameInstance::PersistenceManager()
 			? PersistenceManagerInstance
 			: PersistenceManagerInstance = NewObject<UPersistenceManager>(this, FName("PersistenceManager"));
 }
+
+UDataTablesParser* UCustomGameInstance::GetDataTablesParser()
+{
+	return
+		IsValid(DataTablesParserInstance)
+			? DataTablesParserInstance
+			: DataTablesParserInstance = NewObject<UDataTablesParser>(this, DataTablesParserClass, FName("CraftingManager"));
+}
