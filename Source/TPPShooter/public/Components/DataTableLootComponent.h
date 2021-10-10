@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Engine/DataTable.h"
+#include "Items/Item.h"
 #include "DataTableLootComponent.generated.h"
 
 
@@ -18,7 +19,7 @@ public:
 	UDataTableLootComponent();
 
 	UFUNCTION(BlueprintCallable)
-	TArray<FString> GenerateLoot(int count);
+	TArray<UItem*> GenerateLoot(int count);
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings")

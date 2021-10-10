@@ -29,10 +29,10 @@ void UDataTableLootComponent::Test()
 	UE_LOG(LogTemp, Warning, TEXT("Some text"));
 }
 
-TArray<FString> UDataTableLootComponent::GenerateLoot(int count)
+TArray<UItem*> UDataTableLootComponent::GenerateLoot(int count)
 {
 	auto* gameInstance = Cast<UCustomGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	auto* parser = gameInstance->GetDataTablesParser();
-	TArray<FString> lootNames = parser->GetLoots(LootTable, count);
+	TArray<UItem*> lootNames = parser->GetLoots(LootTable, count);
 	return lootNames;
 }

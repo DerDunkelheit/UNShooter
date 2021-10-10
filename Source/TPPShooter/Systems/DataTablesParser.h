@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
+#include "Items/Item.h"
 #include "UObject/NoExportTypes.h"
 #include "DataTablesParser.generated.h"
 
@@ -12,6 +13,9 @@ struct FLootItemsRawData : public FTableRowBase
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<UItem> ItemClass;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int Probability;
 };
@@ -29,7 +33,7 @@ public:
 	void DisplayBoxLotTable(UDataTable* DataTable);
 
 	UFUNCTION(BlueprintCallable)
-	TArray<FString> GetLoots(UDataTable* DataTable, int LootCount);
+	TArray<UItem*> GetLoots(UDataTable* dataTable, int lootCount);
 
 private:
 	void CalculateTotalWeight(UDataTable* dataTable, int& totalWeightOut, TMap<FLootItemsRawData*, FString>& rawDataMapOut);

@@ -14,22 +14,23 @@ void UDataTablesParser::DisplayBoxLotTable(UDataTable* DataTable)
 	}
 }
 
-TArray<FString> UDataTablesParser::GetLoots(UDataTable* DataTable, int LootCount)
+TArray<UItem*> UDataTablesParser::GetLoots(UDataTable* dataTable, int lootCount)
 {
-    TArray<FString> returnLoot;
+	TArray<UItem*> returnLoot;
 	int totalWeight;
 	TMap<FLootItemsRawData*, FString> allRawMap;
 	
-	CalculateTotalWeight(DataTable, totalWeight, allRawMap);
-
-	for (int i = 0; i < LootCount; i++)
+	CalculateTotalWeight(dataTable, totalWeight, allRawMap);
+	
+	for (int i = 0; i < lootCount; i++)
 	{
 		int randomValue = FMath::RandRange(0, totalWeight);
 		for(auto pair : allRawMap)
 		{
 			if(randomValue < pair.Key->Probability)
 			{
-				returnLoot.Add( pair.Value + " " + FString::FromInt(pair.Key->Probability));
+				UItem* Item = NewObject<UItem>(this, pair.Key->ItemClass);
+				returnLoot.Add(Item);
 				break;
 			}
 
@@ -41,7 +42,7 @@ TArray<FString> UDataTablesParser::GetLoots(UDataTable* DataTable, int LootCount
 }
 
 void UDataTablesParser::CalculateTotalWeight(UDataTable* dataTable, int& totalWeightOut,
-	TMap<FLootItemsRawData*, FString>& rawDataMapOut)
+                                             TMap<FLootItemsRawData*, FString>& rawDataMapOut)
 {
 	totalWeightOut = 0;
 	TArray<FName> rowNames = dataTable->GetRowNames();
