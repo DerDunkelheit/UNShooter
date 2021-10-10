@@ -12,7 +12,7 @@
 //TODO: create max item stacks
 //TODO: create items division into parts
 
-UCLASS(Abstract, BlueprintType, Blueprintable, EditInlineNew , DefaultToInstanced)
+UCLASS(BlueprintType, Blueprintable, EditInlineNew , DefaultToInstanced)
 class TPPSHOOTER_API UItem : public UObject
 {
 	GENERATED_BODY()
