@@ -47,6 +47,7 @@ AFP_FirstPersonCharacter::AFP_FirstPersonCharacter()
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("InteractionComponent"));
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 
 	CharacterWeaponSocket = "WeaponSocket";
 }
@@ -139,4 +140,9 @@ void AFP_FirstPersonCharacter::MoveRight(float Value)
 		// Add movement in that direction
 		AddMovementInput(GetActorRightVector(), Value);
 	}
+}
+
+void AFP_FirstPersonCharacter::AddItem(UItem* newItem)
+{
+	InventoryComponent->AddItem(newItem);
 }

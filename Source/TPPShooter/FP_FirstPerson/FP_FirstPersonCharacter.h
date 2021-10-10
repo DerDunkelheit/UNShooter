@@ -7,6 +7,7 @@
 #include "Components/HealthComponent.h"
 #include "Components/InteractionComponent.h"
 #include "GameFramework/Character.h"
+#include "Items/Item.h"
 #include "TPPShooter/Weapons/Weapon.h"
 
 #include "FP_FirstPersonCharacter.generated.h"
@@ -78,6 +79,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void IncreaseTemporarySpeed(float AdditionalSpeedValue, float Duration);
 
+	UFUNCTION(BlueprintCallable)
+	void AddItem(UItem* newItem);
+
 	FORCEINLINE class USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
@@ -90,6 +94,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	UInteractionComponent* InteractionComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
+	UInventoryComponent* InventoryComponent;
 
 protected:
 	virtual void BeginPlay() override;
