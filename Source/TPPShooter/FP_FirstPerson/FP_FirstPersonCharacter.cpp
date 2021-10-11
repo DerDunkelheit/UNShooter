@@ -48,6 +48,8 @@ AFP_FirstPersonCharacter::AFP_FirstPersonCharacter()
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("InteractionComponent"));
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
+	ItemDropPosition = CreateDefaultSubobject<USceneComponent>(TEXT("ItemDropPosition"));
+	ItemDropPosition->SetupAttachment(RootComponent);
 
 	CharacterWeaponSocket = "WeaponSocket";
 }
@@ -144,5 +146,21 @@ void AFP_FirstPersonCharacter::MoveRight(float Value)
 
 void AFP_FirstPersonCharacter::AddItem(UItem* newItem)
 {
-	InventoryComponent->AddItem(newItem);
+	if(newItem)
+	{
+		InventoryComponent->AddItem(newItem);
+	}
+}
+
+void AFP_FirstPersonCharacter::DropItem(UItem* item)
+{
+	if(item)
+	{
+		InventoryComponent->DropItem(item);
+	}
+}
+
+const FTransform& AFP_FirstPersonCharacter::GetItemDropTransform()
+{
+	return ItemDropPosition->GetComponentTransform();
 }

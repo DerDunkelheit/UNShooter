@@ -3,6 +3,7 @@
 
 #include "Components/InventoryComponent.h"
 
+#include "FP_FirstPerson/FP_FirstPersonCharacter.h"
 #include "TPPShooter/Actors/PickupActor.h"
 #include "TPPShooter/public/Items/AmmoItem.h"
 #include "TPPShooter/public/Items/Item.h"
@@ -107,9 +108,9 @@ void UInventoryComponent::DropItem(UItem* Item)
 
 	OnInventoryUpdated.Broadcast();
 
-	auto Player = Cast<ATPPShooterCharacter>(GetOwner());
-	auto PickUpItem = GetWorld()->SpawnActor<APickupActor>(DropItemPrefab, Player->GetItemDropTransform().GetLocation(),
-	                                                       Player->GetItemDropTransform().Rotator());
+	auto Player = Cast<AFP_FirstPersonCharacter>(GetOwner());
+	const FTransform& DropTransform = Player->GetItemDropTransform();
+	auto PickUpItem = GetWorld()->SpawnActor<APickupActor>(DropItemPrefab, DropTransform.GetLocation(),DropTransform.Rotator());
 
 	PickUpItem->SetItem(Item);
 }

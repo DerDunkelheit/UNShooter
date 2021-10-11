@@ -82,6 +82,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddItem(UItem* newItem);
 
+	UFUNCTION(BlueprintCallable)
+	void DropItem(UItem* item);
+
+	UFUNCTION(BlueprintCallable)
+	const FTransform& GetItemDropTransform(); 
+
 	FORCEINLINE class USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
@@ -97,6 +103,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	UInventoryComponent* InventoryComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
+	USceneComponent* ItemDropPosition;
 
 protected:
 	virtual void BeginPlay() override;
