@@ -44,9 +44,19 @@ public:
 
     UFUNCTION(BlueprintCallable)
 	int GetAmmoQuantity(AmmoTypeEnum AmmoType);
+
+	UFUNCTION(BlueprintCallable)
+	void AddItems(TArray<UItem*> NewItems);
 	
+	UFUNCTION(BlueprintCallable)
 	void AddItem(class UItem* Item);
+
+	UFUNCTION(BlueprintCallable)
+	void ClearInventory();
+
+	UFUNCTION(BlueprintCallable)
 	void RemoveItem(class UItem* Item);
+	
 	void DropItem(class UItem* Item);
 	class UAmmoItem* TryGetAmmoItem(AmmoTypeEnum AmmoType);
 	int RequestAmmoFromInventory(class UAmmoItem* AmmoItem, int RequestedQuantity);

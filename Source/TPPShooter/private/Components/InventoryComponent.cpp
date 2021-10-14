@@ -29,6 +29,14 @@ void UInventoryComponent::BeginPlay()
 	}
 }
 
+void UInventoryComponent::AddItems(TArray<UItem*> NewItems)
+{
+	for (UItem* item : NewItems)
+	{
+		AddItem(item);
+	}
+}
+
 void UInventoryComponent::AddItem(UItem* Item)
 {
 	if (Items.Num() >= Capacity || !Item)
@@ -66,6 +74,13 @@ void UInventoryComponent::AddItem(UItem* Item)
 		Item->World = GetWorld();
 		Items.Add(Item);
 	}
+
+	OnInventoryUpdated.Broadcast();
+}
+
+void UInventoryComponent::ClearInventory()
+{
+	Items.Empty();
 
 	OnInventoryUpdated.Broadcast();
 }

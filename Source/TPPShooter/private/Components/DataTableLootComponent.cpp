@@ -31,6 +31,8 @@ void UDataTableLootComponent::Test()
 
 TArray<UItem*> UDataTableLootComponent::GenerateLoot(int count)
 {
+	verifyf(LootTable != nullptr, TEXT("LootTable wasn't assigned in %s"), *GetOwner()->GetName());
+	
 	auto* gameInstance = Cast<UCustomGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	auto* parser = gameInstance->GetDataTablesParser();
 	TArray<UItem*> lootNames = parser->GetLoots(LootTable, count);
