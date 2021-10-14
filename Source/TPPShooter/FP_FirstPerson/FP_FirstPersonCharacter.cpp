@@ -164,3 +164,8 @@ const FTransform& AFP_FirstPersonCharacter::GetItemDropTransform()
 {
 	return ItemDropPosition->GetComponentTransform();
 }
+
+UHealthComponent* AFP_FirstPersonCharacter::GetHealthComponent()
+{
+	return HealthComponent;
+}

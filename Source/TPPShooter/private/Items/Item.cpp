@@ -11,7 +11,7 @@ UItem::UItem()
 	Quantity = 1;
 }
 
-void UItem::Use(ATPPShooterCharacter* Character)
+void UItem::Use(AFP_FirstPersonCharacter* Character)
 {
 	OnUse(Character);
 }

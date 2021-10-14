@@ -8,11 +8,11 @@ UFoodItem::UFoodItem()
 	bStackable = true;
 }
 
-void UFoodItem::Use(ATPPShooterCharacter* Character)
+void UFoodItem::Use(AFP_FirstPersonCharacter* Character)
 {
     Super::Use(Character);
 	
-    Character->HealthComponent->RestoreHealth(HealthToIncrease);
+    Character->GetHealthComponent()->RestoreHealth(HealthToIncrease);
 	if(OwningInventory)
 	{
 		OwningInventory->RemoveItem(this);

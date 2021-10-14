@@ -86,7 +86,10 @@ public:
 	void DropItem(UItem* item);
 
 	UFUNCTION(BlueprintCallable)
-	const FTransform& GetItemDropTransform(); 
+	const FTransform& GetItemDropTransform();
+
+	UFUNCTION(BlueprintCallable)
+	UHealthComponent* GetHealthComponent();
 
 	FORCEINLINE class USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }

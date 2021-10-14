@@ -98,7 +98,8 @@ void ATPPShooterCharacter::UseItem(UItem* Item)
 {
 	if (Item)
 	{
-		Item->Use(this);
+		//TODO: create an interface for characters, so AI enemies can use inventory as well.
+		//Item->Use(this);
 	}
 }
 

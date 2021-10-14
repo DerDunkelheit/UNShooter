@@ -7,6 +7,7 @@
 #include "TPPShooter/TPPShooterCharacter.h"
 #include "UObject/NoExportTypes.h"
 #include "Components/InventoryComponent.h"
+#include "FP_FirstPerson/FP_FirstPersonCharacter.h"
 #include "Item.generated.h"
 
 //TODO: create max item stacks
@@ -57,8 +58,8 @@ public:
 	UInventoryComponent* OwningInventory;
 
 	virtual class UWorld* GetWorld() const { return World; }
-	virtual void Use(ATPPShooterCharacter* Character);
+	virtual void Use(AFP_FirstPersonCharacter* Character);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnUse(ATPPShooterCharacter* Character);
+	void OnUse(AFP_FirstPersonCharacter* Character);
 };

@@ -23,5 +23,5 @@ public:
     float HealthToIncrease;
 
 protected:
-	virtual void Use(ATPPShooterCharacter* Character) override;
+	virtual void Use(AFP_FirstPersonCharacter* Character) override;
 };
