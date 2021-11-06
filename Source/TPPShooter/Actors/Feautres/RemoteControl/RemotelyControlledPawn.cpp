@@ -3,6 +3,7 @@
 
 #include "TPPShooter/Actors/Feautres/RemoteControl/RemotelyControlledPawn.h"
 
+#include "PlayerControllerBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "TPPShooter/FP_FirstPerson/FP_FirstPersonCharacter.h"
 #include "TPPShooter/FP_FirstPerson/FP_PlayerController.h"
@@ -25,7 +26,7 @@ void ARemotelyControlledPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	AFP_PlayerController* PlayerController = Cast<AFP_PlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	APlayerControllerBase* PlayerController = Cast<APlayerControllerBase>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	PlayerController->PossessEvent.AddDynamic(this, &ARemotelyControlledPawn::OnPawnPossessed);
 	PlayerController->UnPossessEvent.AddDynamic(this, &ARemotelyControlledPawn::OnPawnUnPossessed);
 

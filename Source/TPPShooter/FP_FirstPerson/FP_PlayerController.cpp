@@ -7,12 +7,12 @@ void AFP_PlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 
-	PossessEvent.Broadcast(InPawn);
+	//PossessEvent.Broadcast(InPawn);
 }
 
 void AFP_PlayerController::OnUnPossess()
 {
 	Super::OnUnPossess();
 
-	UnPossessEvent.Broadcast();
+	//UnPossessEvent.Broadcast();
 }
