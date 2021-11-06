@@ -6,7 +6,6 @@
 #include "PlayerControllerBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "TPPShooter/FP_FirstPerson/FP_FirstPersonCharacter.h"
-#include "TPPShooter/FP_FirstPerson/FP_PlayerController.h"
 
 // Sets default values
 ARemotelyControlledPawn::ARemotelyControlledPawn()
