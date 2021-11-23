@@ -6,3 +6,8 @@ public:
 	bool static  IsDebugWeaponEnable();
 	bool static  IsDebugInteractionEnable();
 };
+
+namespace ConsoleDebug
+{
+	bool IsDebugHighlightDrawingEnable();
+}

@@ -14,6 +14,13 @@ FAutoConsoleVariableRef CVARDebugInteractiveDrawing(
 	TEXT("Draw Debug Lines for Interaction"),
 	ECVF_Cheat);
 
+static int32 DebugHighlightDrawing = 0;
+FAutoConsoleVariableRef CVARDebugInteractiveHighlightDrawing(
+	TEXT("Game.DebugHighlighRange"),
+	DebugHighlightDrawing,
+	TEXT("Draw Debug Lines for Highlighting objects"),
+	ECVF_Cheat);
+
 bool GameDebuggerNew::IsDebugWeaponEnable()
 {
 	return DebugWeaponDrawing > 0;
@@ -22,4 +29,9 @@ bool GameDebuggerNew::IsDebugWeaponEnable()
 bool GameDebuggerNew::IsDebugInteractionEnable()
 {
 	return DebugInteractiveDrawing > 0;
+}
+
+bool ConsoleDebug::IsDebugHighlightDrawingEnable()
+{
+	return DebugHighlightDrawing > 0;
 }
