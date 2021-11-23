@@ -25,5 +25,7 @@ public class TPPShooter : ModuleRules
 		{
 			"TPPShooter"
 		});
+
+		OptimizeCode = CodeOptimization.InShippingBuildsOnly;
 	}
 }
