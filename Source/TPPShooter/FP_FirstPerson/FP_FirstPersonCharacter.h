@@ -112,6 +112,7 @@ protected:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 	void OnFire();
 	void EndFire();
 	USkeletalMeshComponent* GetWeaponMesh() const { return Mesh1P; }
@@ -121,4 +122,7 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void DieEvent();
+
+private:
+	void FindActorsForHighlight();
 };

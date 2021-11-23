@@ -8,6 +8,7 @@
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InteractionComponent.h"
+#include "Interfaces/HighlightInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "TPPShooter/NonUClasses/GameDebuggerNew.h"
 
@@ -45,10 +46,10 @@ AFP_FirstPersonCharacter::AFP_FirstPersonCharacter()
 	// Note: The ProjectileClass and the skeletal mesh/anim blueprints for Mesh1P are set in the
 	// derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 
-	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
-	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("InteractionComponent"));
-	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
-	ItemDropPosition = CreateDefaultSubobject<USceneComponent>(TEXT("ItemDropPosition"));
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
+	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("Interaction"));
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+	ItemDropPosition = CreateDefaultSubobject<USceneComponent>(TEXT("ItemDrop"));
 	ItemDropPosition->SetupAttachment(RootComponent);
 
 	CharacterWeaponSocket = "WeaponSocket";
@@ -78,6 +79,13 @@ void AFP_FirstPersonCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	HealthComponent->OnHealthDepleted.AddDynamic(this, &AFP_FirstPersonCharacter::DieEvent);
+}
+
+void AFP_FirstPersonCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	FindActorsForHighlight();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -168,4 +176,32 @@ const FTransform& AFP_FirstPersonCharacter::GetItemDropTransform()
 UHealthComponent* AFP_FirstPersonCharacter::GetHealthComponent()
 {
 	return HealthComponent;
+}
+
+void AFP_FirstPersonCharacter::FindActorsForHighlight()
+{
+	FVector EyeLocation;
+	FRotator EyeRotation;
+	GetActorEyesViewPoint(EyeLocation, EyeRotation);
+
+	FVector ShotDirection = EyeRotation.Vector();
+	FVector TraceEnd = EyeLocation + (ShotDirection * 600);
+
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);
+	QueryParams.bTraceComplex = true;
+
+	FHitResult Hit;
+	if (GetWorld()->LineTraceSingleByChannel(Hit, EyeLocation, TraceEnd, ECC_Visibility, QueryParams))
+	{
+		if(Hit.GetActor()->GetClass()->ImplementsInterface(UHighlightInterface::StaticClass()))
+		{
+			IHighlightInterface::Execute_Highlight(Hit.GetActor(), 0.1f);
+		}
+	}
+
+	if(ConsoleDebug::IsDebugHighlightDrawingEnable())
+	{
+	   DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::Orange, false, 2);
+	}
 }
