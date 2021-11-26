@@ -5,7 +5,10 @@
 #include "CoreMinimal.h"
 #include "Components/DataTableLootComponent.h"
 #include "GameFramework/Actor.h"
+#include "Interfaces/Interactable.h"
 #include "LootableActor.generated.h"
+
+class InventoryComponent;
 
 UCLASS()
 class TPPSHOOTER_API ALootableActor : public AActor, public IInteractable

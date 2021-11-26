@@ -3,15 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-#include "TPPShooter/TPPShooterCharacter.h"
 #include "UObject/NoExportTypes.h"
-#include "Components/InventoryComponent.h"
-#include "FP_FirstPerson/FP_FirstPersonCharacter.h"
 #include "Item.generated.h"
 
 //TODO: create max item stacks
 //TODO: create items division into parts
+
+class UInventoryComponent;
+class AFP_FirstPersonCharacter;
 
 UCLASS(BlueprintType, Blueprintable, EditInlineNew , DefaultToInstanced)
 class TPPSHOOTER_API UItem : public UObject

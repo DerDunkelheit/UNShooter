@@ -8,6 +8,7 @@
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InteractionComponent.h"
+#include "Components/InventoryComponent.h"
 #include "Interfaces/HighlightInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "TPPShooter/NonUClasses/GameDebuggerNew.h"

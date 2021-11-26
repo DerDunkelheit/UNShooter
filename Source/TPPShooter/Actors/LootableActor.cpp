@@ -2,6 +2,7 @@
 
 
 #include "Actors/LootableActor.h"
+#include "Components/InventoryComponent.h"
 
 // Sets default values
 ALootableActor::ALootableActor()

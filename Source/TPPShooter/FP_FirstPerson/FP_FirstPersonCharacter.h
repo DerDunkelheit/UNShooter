@@ -6,6 +6,7 @@
 
 #include "Components/HealthComponent.h"
 #include "Components/InteractionComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/Character.h"
 #include "Items/Item.h"
 #include "TPPShooter/Weapons/Weapon.h"
@@ -14,7 +15,6 @@
 
 class UInputComponent;
 class UCameraComponent;
-class USkeletalMeshComponent;
 class USoundBase;
 class UAnimMontage;
 
