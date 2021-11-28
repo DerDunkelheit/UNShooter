@@ -21,14 +21,14 @@ DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
 AFP_FirstPersonCharacter::AFP_FirstPersonCharacter()
 {
-	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmCompnent"));
+	SpringArm->SetupAttachment(GetMesh());
 
 	// Create a CameraComponent	
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
-	FirstPersonCameraComponent->SetRelativeLocation(FVector(0, 0, 64.f)); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+	FirstPersonCameraComponent->SetupAttachment(SpringArm);
 	
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
@@ -65,6 +65,7 @@ void AFP_FirstPersonCharacter::SetupInitialWeapon()
 	CurrentWeapon->AttachToComponent(GetWeaponMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, CharacterWeaponSocket);
 }
 
+/*
 void AFP_FirstPersonCharacter::AddControllerYawInput(float Val)
 {
 	Super::AddControllerYawInput(Val * MouseSensitivity);
@@ -74,6 +75,7 @@ void AFP_FirstPersonCharacter::AddControllerPitchInput(float Val)
 {
 	Super::AddControllerPitchInput(Val * MouseSensitivity);
 }
+*/
 
 void AFP_FirstPersonCharacter::BeginPlay()
 {
@@ -115,8 +117,8 @@ void AFP_FirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
-	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+	//PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
+	//PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 }
 
 void AFP_FirstPersonCharacter::OnFire()
