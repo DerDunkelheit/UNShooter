@@ -14,6 +14,14 @@
 				"AIModule",
 				"UMG"
 			]
+		},
+		{
+			"Name": "ExampleModule",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"CoreUObject"
+			]
 		}
 	],
 	"Plugins": [

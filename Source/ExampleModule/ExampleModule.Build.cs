@@ -2,12 +2,13 @@
 
 using UnrealBuildTool;
 
-public class TPPShooter : ModuleRules
+public class ExampleModule : ModuleRules
 {
-	public TPPShooter(ReadOnlyTargetRules Target) : base(Target)
+	public ExampleModule(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
+		//Allows include in headers.
 		PublicDependencyModuleNames.AddRange(new string[]
 		{
 			"Core", 
@@ -16,17 +17,9 @@ public class TPPShooter : ModuleRules
 			"InputCore", 
 			"HeadMountedDisplay", 
 			"NavigationSystem",
-			"UMG", 
-			"Json",
-			"JsonUtilities",
-			"ExampleModule"
+			"UMG",
 		});
-
-		PublicIncludePaths.AddRange(new []
-		{
-			"TPPShooter"
-		});
-
-		OptimizeCode = CodeOptimization.InShippingBuildsOnly;
+		
+		//PrivateDependencyModuleNames allows include only in internal cpp files.
 	}
 }
