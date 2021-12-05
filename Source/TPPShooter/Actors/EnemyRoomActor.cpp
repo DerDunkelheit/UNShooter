@@ -29,6 +29,10 @@ void AEnemyRoomActor::BeginPlay()
 	
 	//RoomActor->TestDelegate.AddUFunction(this,NAMEOF(ExampleEventFunction));
 	//RoomActor->TestEvent.AddUFunction(this,NAMEOF(ExampleEventFunction));
+
+	//handles are used to store all binding so in future we can easily unbind them.
+	//FDelegateHandle handle = RoomActor->TestDelegate.AddLambda([]() { });
+	//RoomActor->TestDelegate.Remove(handle);
 }
 
 // Called every frame

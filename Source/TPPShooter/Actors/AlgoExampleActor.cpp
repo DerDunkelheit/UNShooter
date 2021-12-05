@@ -7,7 +7,15 @@
 #include "Algo/AllOf.h"
 #include "Algo/Compare.h"
 #include "Algo/Copy.h"
+#include "Algo/ForEach.h"
 #include "Algo/MaxElement.h"
+#include "Algo/Transform.h"
+
+struct TestClass
+{
+	int health = 0;
+};
+
 
 // Sets default values
 AAlgoExampleActor::AAlgoExampleActor()
@@ -21,6 +29,7 @@ void AAlgoExampleActor::BeginPlay()
 {
 	Super::BeginPlay();
 
+#ifdef TESTCASE
 	//Linq select analog.
 	TArray<int> intArray{5, 10, 12, 3};
 	TArray<int> evenNumbers;
@@ -38,6 +47,40 @@ void AAlgoExampleActor::BeginPlay()
 	for (int value : removeByPredicateExample)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Cyan, FString::FromInt(value));
+	}
+
+#endif
+	
+	TArray<TestClass> TestClasses;
+	TArray<int> arrayOfHealth;
+	for(int i = 0; i < 10; i ++)
+	{
+		TestClasses.Add(TestClass{i});
+	}
+	
+	//Linq select example.
+	Algo::Transform(TestClasses, arrayOfHealth, [](TestClass currentElement) { return currentElement.health; });
+
+	for(auto health : arrayOfHealth)
+	{
+		auto test = FString::FromInt(health);
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *test);
+	}
+	arrayOfHealth.Empty();
+	
+	Algo::TransformIf(TestClasses, arrayOfHealth, [](TestClass currentElement)
+	{
+		return currentElement.health % 2 ==0 ;
+	},
+    [](TestClass currentElement)
+	{
+    	return currentElement.health;
+	});
+
+	for(auto health : arrayOfHealth)
+	{
+		auto test = FString::FromInt(health);
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *test);
 	}
 }
 
