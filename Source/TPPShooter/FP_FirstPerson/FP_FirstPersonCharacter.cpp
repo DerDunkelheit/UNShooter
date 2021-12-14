@@ -9,6 +9,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/InteractionComponent.h"
 #include "Components/InventoryComponent.h"
+#include "GameplayUtilities/GameUtils.h"
 #include "Interfaces/HighlightInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "TPPShooter/NonUClasses/GameDebuggerNew.h"
@@ -183,28 +184,19 @@ UHealthComponent* AFP_FirstPersonCharacter::GetHealthComponent()
 
 void AFP_FirstPersonCharacter::FindActorsForHighlight()
 {
-	FVector EyeLocation;
-	FRotator EyeRotation;
-	GetActorEyesViewPoint(EyeLocation, EyeRotation);
-
-	FVector ShotDirection = EyeRotation.Vector();
-	FVector TraceEnd = EyeLocation + (ShotDirection * 600);
-
-	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(this);
-	QueryParams.bTraceComplex = true;
-
-	FHitResult Hit;
-	if (GetWorld()->LineTraceSingleByChannel(Hit, EyeLocation, TraceEnd, ECC_Visibility, QueryParams))
+	AActor* hitActor;
+	FVector traceStart;
+	FVector traceEnd;
+	if(GameUtils::TryHitFromEye(this, 600, hitActor, traceStart, traceEnd))
 	{
-		if(Hit.GetActor()->GetClass()->ImplementsInterface(UHighlightInterface::StaticClass()))
+		if(hitActor->GetClass()->ImplementsInterface(UHighlightInterface::StaticClass()))
 		{
-			IHighlightInterface::Execute_Highlight(Hit.GetActor(), 0.1f);
+			IHighlightInterface::Execute_Highlight(hitActor, 0.1f);
 		}
 	}
 
 	if(ConsoleDebug::IsDebugHighlightDrawingEnable())
 	{
-	   DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::Orange, false, 2);
+	   DrawDebugLine(GetWorld(), traceStart, traceEnd, FColor::Orange, false, 2);
 	}
 }
