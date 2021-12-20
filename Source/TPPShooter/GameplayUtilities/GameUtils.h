@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "Animation/WidgetAnimation.h"
 
 namespace GameUtils
 {
@@ -49,5 +50,37 @@ namespace GameUtils
 		}
 
 		return false;
+	}
+
+	void StoreWidgetAnimations(UObject* widget, TMap<FName, UWidgetAnimation*>& animationsMapOut)
+	{
+		animationsMapOut.Empty();
+
+		FProperty* prop = widget->GetClass()->PropertyLink;
+ 
+		// Run through all properties of this class to find any widget animations
+		while( prop != nullptr  )
+		{
+			// Only interested in object properties
+			if( prop->GetClass() == FObjectProperty::StaticClass() )
+			{
+				FObjectProperty* objectProp = CastField<FObjectProperty>(prop);
+ 
+				// get only  properties that are widget animations
+				if( objectProp->PropertyClass == UWidgetAnimation::StaticClass() )
+				{
+					UObject* object = objectProp->GetObjectPropertyValue_InContainer( widget );
+					UWidgetAnimation* widgetAnim = Cast<UWidgetAnimation>(object);
+ 
+					if( widgetAnim != nullptr && widgetAnim->MovieScene)
+					{
+						FName animName = widgetAnim->MovieScene->GetFName();
+						animationsMapOut.Add(animName, widgetAnim);
+					}
+				}
+			}
+ 
+			prop = prop->PropertyLinkNext;
+		}
 	}
 } // namespace gameUtils
