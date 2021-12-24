@@ -10,7 +10,10 @@ UCppExampleWidget::UCppExampleWidget(const FObjectInitializer& ObjectInitializer
 void UCppExampleWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	GameUtils::StoreWidgetAnimations(this, AnimationsMap);
+
+	//We cannot use it now, cue GameUtils implementations was moved to private cpp file within TPPShooter module,
+	//so if we add TppShooter to private dependencies path, we'll get circular dependencies error
+	//GameUtils::StoreWidgetAnimations(this, AnimationsMap);
 
 	//we can use that approach if we don't want to use BindWidget meta. 
 	ExampleAnimationWithoutBindWidget = GetAnimationByName("SomeAnimation");
