@@ -37,6 +37,12 @@ public:
 	TSubclassOf<class APickupActor> DropItemPrefab;
 
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Inventory | Grid", meta = (ExposeOnSpawn="true"))
+	int Columns;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Inventory | Grid", meta = (ExposeOnSpawn="true"))
+	int Rows;
+	
+protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
@@ -62,6 +68,7 @@ public:
 	int RequestAmmoFromInventory(class UAmmoItem* AmmoItem, int RequestedQuantity);
 
 private:
+	
 	int CalculateRequestedAmmo(class UAmmoItem* AmmoItem, int RequestedQuantity);
 	UAmmoItem* FindAmmoItem(AmmoTypeEnum AmmoType);
 };

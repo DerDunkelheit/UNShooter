@@ -25,7 +25,7 @@ public:
 	
 	void UpdateTextCount(int value);
 	void ResetText();
-
+ 
 	//should be place in base class for all gaming widgets.
 	UWidgetAnimation* GetAnimationByName(FName animationName) const;
 
