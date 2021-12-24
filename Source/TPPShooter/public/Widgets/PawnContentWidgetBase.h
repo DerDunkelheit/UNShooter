@@ -28,4 +28,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(BindWidget))
 	UInventoryGridWidget* WBP_InventoryGrid;
+
+private:
+	UFUNCTION()
+	void OnInventoryButtonPressed();
 };
