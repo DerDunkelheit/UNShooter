@@ -146,6 +146,16 @@ int UInventoryComponent::RequestAmmoFromInventory(UAmmoItem* AmmoItem, int Reque
 	return 0;
 }
 
+int UInventoryComponent::GetColumns() const
+{
+	return  Columns;
+}
+
+int UInventoryComponent::GetRows() const
+{
+	return Rows;
+}
+
 int UInventoryComponent::CalculateRequestedAmmo(UAmmoItem* AmmoItem, int RequestedQuantity)
 {
 	if (AmmoItem->Quantity > RequestedQuantity)

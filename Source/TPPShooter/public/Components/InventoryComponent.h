@@ -67,6 +67,9 @@ public:
 	class UAmmoItem* TryGetAmmoItem(AmmoTypeEnum AmmoType);
 	int RequestAmmoFromInventory(class UAmmoItem* AmmoItem, int RequestedQuantity);
 
+	int GetColumns() const;
+	int GetRows() const;
+
 private:
 	
 	int CalculateRequestedAmmo(class UAmmoItem* AmmoItem, int RequestedQuantity);
