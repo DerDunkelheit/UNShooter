@@ -8,5 +8,5 @@ void UPawnContentWidgetBase::NativeConstruct()
 	Super::NativeConstruct();
 
 	//InventoryComponent exposes on spawn, when BP_PlayerController creates widget.
-	WBP_InventoryGrid->Initialize(InventoryComponent, TileSize);
+	WBP_InventoryGrid->InitializeGrid(InventoryComponent, TileSize);
 }

@@ -6,7 +6,7 @@
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/CanvasPanelSlot.h"
 
-void UInventoryGridWidget::Initialize(UInventoryComponent* inventoryComponent, float tileSize)
+void UInventoryGridWidget::InitializeGrid(UInventoryComponent* inventoryComponent, float tileSize)
 {
 	InventoryComponent = inventoryComponent;
 	TileSize = tileSize;

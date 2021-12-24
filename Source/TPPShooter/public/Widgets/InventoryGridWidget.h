@@ -35,7 +35,7 @@ class TPPSHOOTER_API UInventoryGridWidget : public UGameWidgetBase
 	GENERATED_BODY()
 
 public:
-	void Initialize(UInventoryComponent* inventoryComponent, float tileSize);
+	void InitializeGrid(UInventoryComponent* inventoryComponent, float tileSize);
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(BindWidget))
