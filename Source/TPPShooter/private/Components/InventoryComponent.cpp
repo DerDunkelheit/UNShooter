@@ -1,9 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Components/InventoryComponent.h"
-
 #include "FP_FirstPerson/FP_FirstPersonCharacter.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "TPPShooter/Actors/PickupActor.h"
 #include "TPPShooter/public/Items/AmmoItem.h"
 #include "TPPShooter/public/Items/Item.h"
@@ -23,9 +22,33 @@ void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	for (auto& Item : DefaultItems)
+	FillOccupiedTilesMap();
+
+	/*for (auto& Item : DefaultItems)
 	{
 		AddItem(Item);
+	}*/
+
+	for (auto& Item : DefaultItems)
+	{
+		TArray<FIntPoint> TilesToPlace;
+		if(HasSpaceInGridInventory(Item, TilesToPlace))
+		{
+			AddItem(Item);
+			ItemsPositions.Add(Item, FItemOccupiedTilesNested{TilesToPlace});
+
+			//Lock occured tiles. TODO: create an event for that
+			for(auto& pair : occupiedTiles)
+			{
+				if(TilesToPlace.FindByPredicate([&](FIntPoint& currentPoint)
+				{
+					return currentPoint.X == pair.Key.X && currentPoint.Y == pair.Key.Y;
+				}))
+				{
+					occupiedTiles[pair.Key] = true;
+				}
+			}
+		}
 	}
 }
 
@@ -78,6 +101,120 @@ void UInventoryComponent::AddItem(UItem* Item)
 	OnInventoryUpdated.Broadcast();
 }
 
+//Is room available
+bool UInventoryComponent::HasSpaceInGridInventory(UItem* item, TArray<FIntPoint>& tilesToPlaceOut)
+{
+	//New version.
+	//zero is the first bottom left tile.
+	FTile tile = IndexToTile(0);
+	FIntPoint itemDimensions = item->Dimensions;
+	FIntPoint inventoryDimensions(Columns, Rows);
+	int lastXIndex = tile.X + inventoryDimensions.X;
+	int lastYIndex = tile.Y + inventoryDimensions.Y;
+
+	if(item->Dimensions.X > Columns || item->Dimensions.Y > Rows) return false;
+	
+	TArray<FIntPoint> availableTiles;
+
+	//TESTING REMOVE LATTER
+	if(Rows == 6)
+	{
+		occupiedTiles[FIntPoint(0, 1)] = true;
+		occupiedTiles[FIntPoint(0, 2)] = true;
+		occupiedTiles[FIntPoint(0, 3)] = true;
+		occupiedTiles[FIntPoint(0, 4)] = true;
+	}
+	//
+
+	int yFirstFoundPosition = 0;
+	bool wasAtLeastOneRowFound = false;
+	//vertically iterations through inventory.
+	for (int i = tile.X; i < lastXIndex; i++)
+	{
+		//TODO: come up with naming.
+		bool wasFoundInCurrentRowInPreviousIteration = false;
+		int currentRowAvailableTilesFoundCount = 0;
+		for (int j = tile.Y; j < lastYIndex; j++)
+		{
+			if(wasAtLeastOneRowFound)
+			{
+				if(j < yFirstFoundPosition) continue;
+			}
+			
+			FTile currentTile = FTile(i, j);
+			check(IsTileValid(currentTile));
+
+			FIntPoint currentTilePoint(i, j);
+			if(!occupiedTiles[currentTilePoint])
+			{
+				yFirstFoundPosition = j;
+				wasFoundInCurrentRowInPreviousIteration = true;
+				wasAtLeastOneRowFound = true;
+				availableTiles.Add(currentTilePoint);
+				currentRowAvailableTilesFoundCount++;
+			}
+			else
+			{
+				if(wasFoundInCurrentRowInPreviousIteration)
+				{
+					wasFoundInCurrentRowInPreviousIteration = false;
+					wasAtLeastOneRowFound = false;
+					availableTiles.Empty();
+					currentRowAvailableTilesFoundCount = 0;
+				}
+			}
+
+			//MoveToNextLine, because we have already fond suitable amount.
+			if(currentRowAvailableTilesFoundCount == itemDimensions.Y)
+			{
+				yFirstFoundPosition -= currentRowAvailableTilesFoundCount - 1;
+				break;
+			}
+		}
+
+		//Prevent case when we found tiles but not required amount and move to next colum, for instance we got 3 * 3 size item and we found only 2 Y tiles.
+		if(currentRowAvailableTilesFoundCount != itemDimensions.Y)
+		{
+			wasAtLeastOneRowFound = false;
+			availableTiles.Empty();
+		}
+
+		//Check if we found enough tiles. 
+		if(availableTiles.Num() == itemDimensions.X * itemDimensions.Y)
+		{
+			//We can use it as an out parameter because TArray is allocated in the heap by default.
+			tilesToPlaceOut = availableTiles;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+FTile UInventoryComponent::IndexToTile(int index)
+{
+	FTile returnTile;
+
+	int x = UKismetMathLibrary::Percent_IntInt(index, Columns);
+	int y = index / Columns;
+
+	returnTile.X = x;
+	returnTile.Y = y;
+
+	return returnTile;
+}
+
+int UInventoryComponent::TileToIndex(FTile tile)
+{
+	return tile.X + tile.Y * Columns;
+}
+
+bool UInventoryComponent::IsTileValid(FTile tile)
+{
+	bool value = ((tile.X >= 0 && tile.Y >= 0) && (tile.X < Columns && tile.Y < Rows));
+	return ((tile.X >= 0 && tile.Y >= 0) && (tile.X < Columns && tile.Y < Rows));
+}
+
 void UInventoryComponent::ClearInventory()
 {
 	Items.Empty();
@@ -125,7 +262,8 @@ void UInventoryComponent::DropItem(UItem* Item)
 
 	auto Player = Cast<AFP_FirstPersonCharacter>(GetOwner());
 	const FTransform& DropTransform = Player->GetItemDropTransform();
-	auto PickUpItem = GetWorld()->SpawnActor<APickupActor>(DropItemPrefab, DropTransform.GetLocation(),DropTransform.Rotator());
+	auto PickUpItem = GetWorld()->SpawnActor<APickupActor>(DropItemPrefab, DropTransform.GetLocation(),
+	                                                       DropTransform.Rotator());
 
 	PickUpItem->SetItem(Item);
 }
@@ -148,12 +286,17 @@ int UInventoryComponent::RequestAmmoFromInventory(UAmmoItem* AmmoItem, int Reque
 
 int UInventoryComponent::GetColumns() const
 {
-	return  Columns;
+	return Columns;
 }
 
 int UInventoryComponent::GetRows() const
 {
 	return Rows;
+}
+
+TMap<UItem*, FItemOccupiedTilesNested>& UInventoryComponent::GetItemsPositionsMap()
+{
+	return ItemsPositions;
 }
 
 int UInventoryComponent::CalculateRequestedAmmo(UAmmoItem* AmmoItem, int RequestedQuantity)
@@ -196,4 +339,52 @@ UAmmoItem* UInventoryComponent::FindAmmoItem(AmmoTypeEnum AmmoType)
 		}
 	}
 	return nullptr;
+}
+
+UItem* UInventoryComponent::GetItemAtIndex(int index)
+{
+	check(Items.IsValidIndex(index));
+
+	return Items[index];
+}
+
+void UInventoryComponent::AddItemAt(UItem* item, int topLeftIndex)
+{
+	FTile tile = IndexToTile(topLeftIndex);
+	FIntPoint dimensions = item->Dimensions;
+	int lastXIndex = tile.X + dimensions.X - 1;
+	int lastYIndex = tile.Y + dimensions.Y - 1;
+
+	//TODO: use ForEach algo.
+	for (int i = tile.X; i < lastXIndex; i++)
+	{
+		for (int j = tile.Y; j < lastYIndex; j++)
+		{
+			FTile currentTile = FTile(i, j);
+
+			Items.Insert(item, TileToIndex(currentTile));
+		}
+	}
+}
+
+void UInventoryComponent::FillOccupiedTilesMap()
+{
+	FTile tile = IndexToTile(0);
+	FIntPoint inventoryDimensions(Columns, Rows);
+	int lastXIndex = tile.X + inventoryDimensions.X;
+	int lastYIndex = tile.Y + inventoryDimensions.Y;
+
+	//vertically iterations through inventory.
+	for (int i = tile.X; i < lastXIndex; i++)
+	{
+		for (int j = tile.Y; j < lastYIndex; j++)
+		{
+			FTile currentTile = FTile(i, j);
+			
+			check(IsTileValid(currentTile));
+
+			//TODO: remember about save/load items.
+			occupiedTiles.Add(FIntPoint(currentTile.X, currentTile.Y), false);
+		}
+	}
 }

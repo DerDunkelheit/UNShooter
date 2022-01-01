@@ -11,7 +11,17 @@ UItem::UItem()
 	Quantity = 1;
 }
 
+UMaterialInterface* UItem::GetIcon()
+{
+	return bRotated ? GridIconRotated : GridIcon;
+}
+
 void UItem::Use(AFP_FirstPersonCharacter* Character)
 {
 	OnUse(Character);
+}
+
+FIntPoint UItem::GetDimensions()
+{
+	return Dimensions;
 }

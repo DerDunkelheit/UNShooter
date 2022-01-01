@@ -2,14 +2,18 @@
 
 
 #include "Widgets/InventoryGridWidget.h"
-
 #include "Blueprint/WidgetLayoutLibrary.h"
+
 #include "Components/CanvasPanelSlot.h"
+#include "Widgets/ItemWidget.h"
 
 void UInventoryGridWidget::InitializeGrid(UInventoryComponent* inventoryComponent, float tileSize)
 {
 	InventoryComponent = inventoryComponent;
 	TileSize = tileSize;
+
+	//TODO: fix problem with multiple bindings.
+	InventoryComponent->OnInventoryUpdated.AddDynamic(this, &UInventoryGridWidget::Refresh);
 	
 	UCanvasPanelSlot* canvasPanelSlot = UWidgetLayoutLibrary::SlotAsCanvasSlot(GridBorder);
 	int sizeX = inventoryComponent->GetColumns() * tileSize;
@@ -17,6 +21,12 @@ void UInventoryGridWidget::InitializeGrid(UInventoryComponent* inventoryComponen
 	canvasPanelSlot->SetSize(FVector2D(sizeX, sizeY));
 	
 	CreateLineSegments();
+	Refresh();
+}
+
+void UInventoryGridWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
 }
 
 void UInventoryGridWidget::CreateLineSegments()
@@ -31,5 +41,22 @@ void UInventoryGridWidget::CreateLineSegments()
 	{
 		int y = i * TileSize;
 		Lines.Add(FLine(FVector2D(0,y), FVector2D(InventoryComponent->GetColumns() * TileSize, y)));
+	}
+}
+
+void UInventoryGridWidget::Refresh()
+{
+	auto& positionMap = InventoryComponent->GetItemsPositionsMap();
+
+	for(auto& pair : positionMap)
+	{
+		UItemWidget* itemWidget = CreateWidget<UItemWidget>(GetOwningPlayer(), ItemWidgetClass);
+		itemWidget->SetInitialProperties(TileSize, pair.Key);
+		UCanvasPanelSlot* panelSlot  = Cast<UCanvasPanelSlot>(GridCanvasPanel->AddChild(itemWidget));
+		panelSlot->SetAutoSize(true);
+
+		FIntPoint topLeftTile = pair.Value.occupiedTiles[0];
+		
+		panelSlot->SetPosition(FVector2D(topLeftTile.X * TileSize, topLeftTile.Y * TileSize));
 	}
 }

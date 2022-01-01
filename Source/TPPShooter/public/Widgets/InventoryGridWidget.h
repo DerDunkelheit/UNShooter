@@ -3,31 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ItemWidget.h"
 #include "Components/Border.h"
+#include "Components/CanvasPanel.h"
 #include "Components/InventoryComponent.h"
+#include "Structures/Line.h"
 #include "Widgets/GameWidgetBase.h"
 #include "InventoryGridWidget.generated.h"
-
-//Class for holding positions for drawing grid's segments.
-USTRUCT(BlueprintType)
-struct FLine
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FVector2D Start;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FVector2D End;
-
-	FLine() = default;
-
-	FLine(FVector2D start, FVector2D end)
-	{
-		Start = start;
-		End = end;
-	}
-};
 
 UCLASS()
 class TPPSHOOTER_API UInventoryGridWidget : public UGameWidgetBase
@@ -36,10 +18,18 @@ class TPPSHOOTER_API UInventoryGridWidget : public UGameWidgetBase
 
 public:
 	void InitializeGrid(UInventoryComponent* inventoryComponent, float tileSize);
+
+	virtual void NativeConstruct() override;
 	
 protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UItemWidget> ItemWidgetClass;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(BindWidget))
 	UBorder* GridBorder;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(BindWidget))
+	UCanvasPanel* GridCanvasPanel;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UInventoryComponent* InventoryComponent;
@@ -53,4 +43,6 @@ protected:
 	
 private:
 	void CreateLineSegments();
+	UFUNCTION()
+	void Refresh();
 };

@@ -7,15 +7,44 @@
 #include "Algo/AllOf.h"
 #include "Algo/Compare.h"
 #include "Algo/Copy.h"
+#include "Algo/Count.h"
 #include "Algo/ForEach.h"
 #include "Algo/MaxElement.h"
 #include "Algo/Transform.h"
 
+
+struct ExampleClass
+{
+
+	int a;
+	
+	~ExampleClass()
+	{
+		UE_LOG(LogTemp, Warning, TEXT("I was destroyed"));
+	}
+};
+
 struct TestClass
 {
 	int health = 0;
+
+	TSharedPtr<ExampleClass> e0;
+
+	TArray<int> prefPositions;
 };
 
+struct A
+{
+	virtual ~A()
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Destructor"));
+	}
+};
+
+struct B : public A
+{
+	int test = 0;
+};
 
 // Sets default values
 AAlgoExampleActor::AAlgoExampleActor()
@@ -24,11 +53,69 @@ AAlgoExampleActor::AAlgoExampleActor()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
+FString AAlgoExampleActor::GetTestName()
+{
+	return ICppOnlyInterface::GetTestName();
+}
+
 // Called when the game starts or when spawned
 void AAlgoExampleActor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//FString myString = GetTestName();
+
+	TSharedPtr<A> base = MakeShareable<A>(new A);
+	TSharedPtr<B>  derived = MakeShareable<B>(new B);
+
+	TestClass* a = new TestClass();
+	{
+		TSharedPtr<ExampleClass> e0;
+		{
+			//TUniquePtr<ExampleClass> a = MakeUnique<ExampleClass>();
+			TSharedPtr<ExampleClass> myShared = MakeShareable<ExampleClass>(new ExampleClass);
+			e0 = myShared;
+			a->e0 = myShared;
+		}
+	}
+
+	TArray<TestClass> myArray;
+	TestClass first;
+	first.prefPositions.Add(1);
+	first.prefPositions.Add(2);
+	first.prefPositions.Add(3);
+	myArray.Add(first);
+
+	TestClass second;
+	second.prefPositions.Add(1);
+	second.prefPositions.Add(2);
+	
+	second.prefPositions.Add(-1);
+	myArray.Add(second);
+
+	TestClass third;
+	third.prefPositions.Add(1);
+	third.prefPositions.Add(-1);
+	third.prefPositions.Add(-1);
+	myArray.Add(third);
+	
+	Algo::Sort(myArray, [](TestClass& a, TestClass& b)
+	{
+		int countA = Algo::CountIf(a.prefPositions, [](int currentPos)
+			{
+			  return currentPos != -1;
+			});
+
+		int countB = Algo::CountIf(b.prefPositions, [](int currentPos)
+		{
+			return currentPos != -1;
+		});
+		
+		return countA < countB;
+	});
+
+	int fsdfd = 5;
+	
 #ifdef TESTCASE
 	//Linq select analog.
 	TArray<int> intArray{5, 10, 12, 3};
@@ -67,6 +154,9 @@ void AAlgoExampleActor::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *test);
 	}
 	arrayOfHealth.Empty();
+
+	delete(a);
+	a = nullptr;
 	
 	Algo::TransformIf(TestClasses, arrayOfHealth, [](TestClass currentElement)
 	{

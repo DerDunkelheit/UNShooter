@@ -74,9 +74,9 @@ void AStorageHubActor::Interact_Implementation()
 
 void AStorageHubActor::TestDubug()
 {
-	FString name = "Alex";
+	/*FString name = "Alex";
 	int age = 19;
 	FString message = FString::Printf(TEXT("Name: %s , age: %d"), *name, age);
 
-	GEngine->AddOnScreenDebugMessage(0, 3, FColor::Green, message);
+	GEngine->AddOnScreenDebugMessage(0, 3, FColor::Green, message);*/
 }
