@@ -22,7 +22,8 @@ public:
 	//We have to use it, because we want to achieve similar behavior to ExposeOnSpawn in BP. maybe it's not the best solution. TODO: make research.
 	void SetInitialProperties(float tileSize, UItem* item);
 
-protected:
+	virtual void NativeConstruct() override;
+
 	UPROPERTY(BlueprintReadOnly)
 	UItem* Item;
 	
@@ -37,4 +38,15 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(BindWidget))
 	UImage* ItemImage;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings")
+	FLinearColor HighlightColor;
+
+protected:
+	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+	virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
+
+private:
+	FLinearColor InitialColor;
 };
