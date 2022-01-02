@@ -40,6 +40,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	TArray<FLine> Lines;
+
+protected:
+	virtual void NativeDestruct() override;
 	
 private:
 	void CreateLineSegments();

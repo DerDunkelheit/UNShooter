@@ -1,19 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Widgets/InventoryGridWidget.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
-
 #include "Components/CanvasPanelSlot.h"
 #include "Widgets/ItemWidget.h"
 
 void UInventoryGridWidget::InitializeGrid(UInventoryComponent* inventoryComponent, float tileSize)
 {
 	InventoryComponent = inventoryComponent;
-	TileSize = tileSize;
-
-	//TODO: fix problem with multiple bindings.
 	InventoryComponent->OnInventoryUpdated.AddDynamic(this, &UInventoryGridWidget::Refresh);
+	TileSize = tileSize;
 	
 	UCanvasPanelSlot* canvasPanelSlot = UWidgetLayoutLibrary::SlotAsCanvasSlot(GridBorder);
 	int sizeX = inventoryComponent->GetColumns() * tileSize;
@@ -27,6 +23,14 @@ void UInventoryGridWidget::InitializeGrid(UInventoryComponent* inventoryComponen
 void UInventoryGridWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+}
+
+void UInventoryGridWidget::NativeDestruct()
+{
+	Super::NativeDestruct();
+
+	GridCanvasPanel->ClearChildren();
+	InventoryComponent->OnInventoryUpdated.RemoveDynamic(this, &UInventoryGridWidget::Refresh);
 }
 
 void UInventoryGridWidget::CreateLineSegments()
@@ -47,7 +51,8 @@ void UInventoryGridWidget::CreateLineSegments()
 void UInventoryGridWidget::Refresh()
 {
 	auto& positionMap = InventoryComponent->GetItemsPositionsMap();
-
+	
+	GridCanvasPanel->ClearChildren();
 	for(auto& pair : positionMap)
 	{
 		UItemWidget* itemWidget = CreateWidget<UItemWidget>(GetOwningPlayer(), ItemWidgetClass);
