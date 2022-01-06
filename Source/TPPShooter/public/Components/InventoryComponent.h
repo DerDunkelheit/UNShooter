@@ -68,13 +68,14 @@ public:
 	void AddItem(class UItem* Item);
 	
 	UFUNCTION(BlueprintCallable)
-	bool HasSpaceInGridInventory(UItem* item, TArray<FIntPoint>& tilesToPlaceOut);
+	bool HasSpaceInGridInventory(UItem* item, TArray<FIntPoint>& tilesToPlaceOut, int Index = 0);
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FTile IndexToTile(int index);
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	int TileToIndex(FTile tile);
 
+	UFUNCTION(BlueprintCallable)
 	bool IsTileValid(FTile tile);
 
 	UFUNCTION(BlueprintCallable)
@@ -82,6 +83,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void RemoveItem(class UItem* Item);
+
+	UFUNCTION(BlueprintCallable)
+	void ClearItemPreviousCells(UItem* Item);
+	UFUNCTION(BlueprintCallable)
+	void SetNewPositionsForItem(UItem* Item, TArray<FIntPoint> tiles);
 	
 	void DropItem(class UItem* Item);
 	class UAmmoItem* TryGetAmmoItem(AmmoTypeEnum AmmoType);

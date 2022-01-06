@@ -43,9 +43,10 @@ protected:
 
 protected:
 	virtual void NativeDestruct() override;
+
+	UFUNCTION(BlueprintCallable)
+	void Refresh();
 	
 private:
 	void CreateLineSegments();
-	UFUNCTION()
-	void Refresh();
 };

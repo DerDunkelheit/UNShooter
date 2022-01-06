@@ -10,9 +10,8 @@
 #include "Widgets/GameWidgetBase.h"
 #include "ItemWidget.generated.h"
 
-/**
- * 
- */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDragStarted, UItem*, itemObject);
+
 UCLASS()
 class TPPSHOOTER_API UItemWidget : public UGameWidgetBase
 {
@@ -38,6 +37,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(BindWidget))
 	UImage* ItemImage;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnDragStarted DragStartedEvent;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings")

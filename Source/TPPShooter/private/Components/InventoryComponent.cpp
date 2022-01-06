@@ -101,40 +101,29 @@ void UInventoryComponent::AddItem(UItem* Item)
 	OnInventoryUpdated.Broadcast();
 }
 
-//Is room available
-bool UInventoryComponent::HasSpaceInGridInventory(UItem* item, TArray<FIntPoint>& tilesToPlaceOut)
+
+bool UInventoryComponent::HasSpaceInGridInventory(UItem* item, TArray<FIntPoint>& tilesToPlaceOut, int Index)
 {
-	//New version.
-	//zero is the first bottom left tile.
-	FTile tile = IndexToTile(0);
+	//Index zero is the first top left tile.
+	
+	FTile tile = IndexToTile(Index);
 	FIntPoint itemDimensions = item->Dimensions;
 	FIntPoint inventoryDimensions(Columns, Rows);
-	int lastXIndex = tile.X + inventoryDimensions.X;
-	int lastYIndex = tile.Y + inventoryDimensions.Y;
+	//int lastXIndex = tile.X + inventoryDimensions.X;
+	//int lastYIndex = tile.Y + inventoryDimensions.Y;
 
 	if(item->Dimensions.X > Columns || item->Dimensions.Y > Rows) return false;
 	
 	TArray<FIntPoint> availableTiles;
-
-	//TESTING REMOVE LATTER
-	if(Rows == 6)
-	{
-		occupiedTiles[FIntPoint(0, 1)] = true;
-		occupiedTiles[FIntPoint(0, 2)] = true;
-		occupiedTiles[FIntPoint(0, 3)] = true;
-		occupiedTiles[FIntPoint(0, 4)] = true;
-	}
-	//
-
 	int yFirstFoundPosition = 0;
 	bool wasAtLeastOneRowFound = false;
 	//vertically iterations through inventory.
-	for (int i = tile.X; i < lastXIndex; i++)
+	for (int i = tile.X; i < inventoryDimensions.X; i++)
 	{
 		//TODO: come up with naming.
 		bool wasFoundInCurrentRowInPreviousIteration = false;
 		int currentRowAvailableTilesFoundCount = 0;
-		for (int j = tile.Y; j < lastYIndex; j++)
+		for (int j = tile.Y; j < inventoryDimensions.Y; j++)
 		{
 			if(wasAtLeastOneRowFound)
 			{
@@ -142,7 +131,7 @@ bool UInventoryComponent::HasSpaceInGridInventory(UItem* item, TArray<FIntPoint>
 			}
 			
 			FTile currentTile = FTile(i, j);
-			check(IsTileValid(currentTile));
+			if(!IsTileValid(currentTile)) return false;
 
 			FIntPoint currentTilePoint(i, j);
 			if(!occupiedTiles[currentTilePoint])
@@ -241,6 +230,41 @@ void UInventoryComponent::RemoveItem(UItem* Item)
 		}
 
 		OnInventoryUpdated.Broadcast();
+	}
+}
+
+void UInventoryComponent::ClearItemPreviousCells(UItem* Item)
+{
+	//TODO: create an event for that, as mentioned above.
+	TArray<FIntPoint> previousTiles = ItemsPositions[Item].occupiedTiles;
+	for(auto& pair : occupiedTiles)
+	{
+		for(auto& tile : previousTiles)
+		{
+			if(pair.Key.X == tile.X && pair.Key.Y == tile.Y)
+			{
+				occupiedTiles[pair.Key] = false;
+			}
+		}
+	}
+	//TODO: Check is item valid.
+	ItemsPositions[Item].occupiedTiles.Empty();
+}
+
+void UInventoryComponent::SetNewPositionsForItem(UItem* Item, TArray<FIntPoint> tiles)
+{
+	ItemsPositions[Item].occupiedTiles = tiles;
+
+	//Lock occured tiles. TODO: create an event for that
+	for(auto& pair : occupiedTiles)
+	{
+		if(ItemsPositions[Item].occupiedTiles.FindByPredicate([&](FIntPoint& currentPoint)
+		{
+			return currentPoint.X == pair.Key.X && currentPoint.Y == pair.Key.Y;
+		}))
+		{
+			occupiedTiles[pair.Key] = true;
+		}
 	}
 }
 
