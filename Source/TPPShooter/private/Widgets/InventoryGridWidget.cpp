@@ -1,8 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Widgets/InventoryGridWidget.h"
+#include "Blueprint/SlateBlueprintLibrary.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Kismet/KismetInputLibrary.h"
 #include "Widgets/ItemWidget.h"
 
 void UInventoryGridWidget::InitializeGrid(UInventoryComponent* inventoryComponent, float tileSize)
@@ -31,6 +33,15 @@ void UInventoryGridWidget::NativeDestruct()
 
 	GridCanvasPanel->ClearChildren();
 	InventoryComponent->OnInventoryUpdated.RemoveDynamic(this, &UInventoryGridWidget::Refresh);
+}
+
+bool UInventoryGridWidget::NativeOnDragOver(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent,
+	UDragDropOperation* InOperation)
+{
+	FVector2D mousePosition = USlateBlueprintLibrary::AbsoluteToLocal(
+		InGeometry, UKismetInputLibrary::PointerEvent_GetScreenSpacePosition(InDragDropEvent));
+	
+	return Super::NativeOnDragOver(InGeometry, InDragDropEvent, InOperation);
 }
 
 void UInventoryGridWidget::CreateLineSegments()

@@ -71,6 +71,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	TSubclassOf<AWeapon> InitialWeapon;
 
+	UFUNCTION(BlueprintCallable)
+	void TestHotReload();
+
 public:
 	UFUNCTION(BlueprintCallable)
 	UAnimInstance* GetWeaponMeshAnimInstance() const { return Mesh1P->GetAnimInstance(); }
@@ -78,6 +81,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetupInitialWeapon();
 
+	//TODO: create UObjects ability system, or use Unreal abilities system.
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void IncreaseTemporarySpeed(float AdditionalSpeedValue, float Duration);
 

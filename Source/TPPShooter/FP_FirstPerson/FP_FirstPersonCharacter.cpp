@@ -41,7 +41,7 @@ AFP_FirstPersonCharacter::AFP_FirstPersonCharacter()
 	// Set weapon damage and range
 	WeaponRange = 5000.0f;
 	WeaponDamage = 500000.0f;
-
+	
 	// Default offset from the character location for projectiles to spawn
 	GunOffset = FVector(100.0f, 30.0f, 10.0f);
 
@@ -55,6 +55,12 @@ AFP_FirstPersonCharacter::AFP_FirstPersonCharacter()
 	ItemDropPosition->SetupAttachment(RootComponent);
 
 	CharacterWeaponSocket = "WeaponSocket";
+}
+
+void AFP_FirstPersonCharacter::TestHotReload()
+{
+	int test = 15;
+	GEngine->AddOnScreenDebugMessage(2, 2, FColor::Cyan, FString::FromInt(test));
 }
 
 void AFP_FirstPersonCharacter::SetupInitialWeapon()

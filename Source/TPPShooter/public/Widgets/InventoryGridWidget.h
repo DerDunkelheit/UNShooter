@@ -44,6 +44,9 @@ protected:
 protected:
 	virtual void NativeDestruct() override;
 
+	virtual bool NativeOnDragOver(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent,
+		UDragDropOperation* InOperation) override;
+
 	UFUNCTION(BlueprintCallable)
 	void Refresh();
 	
